@@ -3,6 +3,7 @@
 #include <cmath>
 #include "portaudio.h"
 #include "IUnityInterface.h"
+#include "RingBuffer.h"
 
 #if defined(_DEBUG)
 #define LASP_LOG(format, ...) std::printf("LASP: "##format##"\n", __VA_ARGS__)
@@ -15,7 +16,7 @@
 namespace
 {
     PaStream* stream;
-	float peakLevel;
+    Lasp::RingBuffer ringBuffer;
 
     static int AudioCallback(
         const void* inputBuffer,
@@ -26,10 +27,8 @@ namespace
         void* userData
     )
     {
-		peakLevel = 0;
 		auto in = reinterpret_cast<const float*>(inputBuffer);
-		for (auto i = 0u; i < framesPerBuffer; i++)
-			peakLevel = std::fmaxf(peakLevel, std::fabsf(*in++));
+		for (auto i = 0u; i < framesPerBuffer; i++) ringBuffer.pushFrame(*in++);
 		return 0;
     }
 }
@@ -95,8 +94,19 @@ extern "C"
 		LASP_LOG("Finalized.");
 	}
 
-	float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetPeakLevel()
+	float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetPeakLevel(float duration)
 	{
-		return peakLevel;
+        return ringBuffer.getPeak(static_cast<size_t>(duration * 48000));
 	}
+
+    float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetRmsLevel(float duration)
+    {
+        return ringBuffer.getRMS(static_cast<size_t>(duration * 48000));
+    }
+
+    int32_t UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspCopyWaveform(float* dest, int32_t length)
+    {
+        ringBuffer.copyRecentFrames(dest, length);
+        return min(length, static_cast<int32_t>(ringBuffer.size()));
+    }
 }

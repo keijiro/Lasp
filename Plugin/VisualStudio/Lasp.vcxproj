@@ -81,6 +81,7 @@
     <ClInclude Include="..\PortAudio\include\pa_win_wasapi.h" />
     <ClInclude Include="..\PortAudio\include\portaudio.h" />
     <ClInclude Include="..\Source\IUnityInterface.h" />
+    <ClInclude Include="..\Source\RingBuffer.h" />
     <ClInclude Include="..\Source\stdafx.h" />
     <ClInclude Include="..\Source\targetver.h" />
   </ItemGroup>

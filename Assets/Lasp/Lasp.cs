@@ -1,14 +1,23 @@
 ﻿using UnityEngine;
 using System.Runtime.InteropServices;
 
-public class Lasp : MonoBehaviour
+namespace Lasp
 {
-    [DllImport("Lasp")]
-    public static extern bool LaspInitialize();
+    public static class PluginEntry
+    {
+        [DllImport("Lasp", EntryPoint="LaspInitialize")]
+        public static extern bool Initialize();
 
-    [DllImport("Lasp")]
-    public static extern void LaspFinalize();
+        [DllImport("Lasp", EntryPoint="LaspFinalize")]
+        public static extern void Terminate();
 
-    [DllImport("Lasp")]
-    public static extern float LaspGetPeakLevel();
+        [DllImport("Lasp", EntryPoint="LaspGetPeakLevel")]
+        public static extern float GetPeakLevel(float duration);
+
+        [DllImport("Lasp", EntryPoint="LaspGetRmsLevel")]
+        public static extern float GetRmsLevel(float duration);
+
+        [DllImport("Lasp", EntryPoint="LaspCopyWaveform")]
+        public static extern int CopyWaveform(float[] dest, int length);
+    }
 }

@@ -1,0 +1,11 @@
+*.swp
+
+.DS_Store
+Desktop.ini
+
+/Library/
+/Temp/
+
+/Plugin/VisualStudio/.vs
+/Plugin/VisualStudio/x64
+/Plugin/VisualStudio/*.user

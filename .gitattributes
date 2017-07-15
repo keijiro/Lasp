@@ -1,0 +1,8 @@
+* text=auto
+
+*.pbxproj           text eol=lf
+
+*.props             text eol=crlf
+*.sln               text eol=crlf
+*.vcxproj           text eol=crlf
+*.vcxproj.filters   text eol=crlf

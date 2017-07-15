@@ -96,12 +96,12 @@ extern "C"
 
 	float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetPeakLevel(float duration)
 	{
-        return ringBuffer.getPeak(static_cast<size_t>(duration * 48000));
+        return ringBuffer.getPeakLevel(static_cast<size_t>(duration * 48000));
 	}
 
-    float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetRmsLevel(float duration)
+    float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspCalculateRMS(float duration)
     {
-        return ringBuffer.getRMS(static_cast<size_t>(duration * 48000));
+        return ringBuffer.calculateRMS(static_cast<size_t>(duration * 48000));
     }
 
     int32_t UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspCopyWaveform(float* dest, int32_t length)

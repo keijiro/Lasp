@@ -42,7 +42,7 @@ public class Tester : MonoBehaviour
     void Update()
     {
         var peak = Lasp.PluginEntry.GetPeakLevel(Time.deltaTime);
-        var rms = Lasp.PluginEntry.GetRmsLevel(Time.deltaTime);
+        var rms = Lasp.PluginEntry.CalculateRMS(Time.deltaTime);
         Lasp.PluginEntry.CopyWaveform(_waveform, _waveform.Length);
 
         _peakIndicator.localScale = new Vector3(1, peak, 1);

@@ -14,8 +14,8 @@ namespace Lasp
         [DllImport("Lasp", EntryPoint="LaspGetPeakLevel")]
         public static extern float GetPeakLevel(float duration);
 
-        [DllImport("Lasp", EntryPoint="LaspGetRmsLevel")]
-        public static extern float GetRmsLevel(float duration);
+        [DllImport("Lasp", EntryPoint="LaspCalculateRMS")]
+        public static extern float CalculateRMS(float duration);
 
         [DllImport("Lasp", EntryPoint="LaspCopyWaveform")]
         public static extern int CopyWaveform(float[] dest, int length);

@@ -4,6 +4,7 @@
 #include "portaudio.h"
 #include "IUnityInterface.h"
 #include "RingBuffer.h"
+#include "BiquadFilter.h"
 
 #if defined(_DEBUG)
 #define LASP_LOG(format, ...) std::printf("LASP: "##format##"\n", __VA_ARGS__)
@@ -16,19 +17,33 @@
 namespace
 {
     PaStream* stream;
-    Lasp::RingBuffer ringBuffer;
 
-    static int AudioCallback(
-        const void* inputBuffer,
-		void* /* outputBuffer */,
+    Lasp::BiquadFilter filters[6];
+    Lasp::RingBuffer ringBuffers[4];
+
+    bool checkBufferIndex(int index)
+    {
+        return index >= 0 && index < 4;
+    }
+
+    int AudioCallback(
+        const void* inputBufferPointer,
+		void* /* outputBufferPointer */,
         unsigned long framesPerBuffer,
         const PaStreamCallbackTimeInfo* timeInfo,
         PaStreamCallbackFlags statusFlags,
         void* userData
     )
     {
-		auto in = reinterpret_cast<const float*>(inputBuffer);
-		for (auto i = 0u; i < framesPerBuffer; i++) ringBuffer.pushFrame(*in++);
+		auto inputBuffer = reinterpret_cast<const float*>(inputBufferPointer);
+        for (auto i = 0u; i < framesPerBuffer; i++)
+        {
+            auto input = inputBuffer[i];
+            ringBuffers[0].pushFrame(input);
+            ringBuffers[1].pushFrame(filters[1].feedSample(filters[0].feedSample(input))); // Low
+            ringBuffers[2].pushFrame(filters[3].feedSample(filters[2].feedSample(input))); // Middle
+            ringBuffers[3].pushFrame(filters[5].feedSample(filters[4].feedSample(input))); // High
+        }
 		return 0;
     }
 }
@@ -77,6 +92,13 @@ extern "C"
 			return false;
 		}
 
+        filters[0].setLowpass(0.02f, 0.15f);
+        filters[1].setLowpass(0.02f, 0.15f);
+        filters[2].setBandpass(0.02f, 0.15f);
+        filters[3].setBandpass(0.02f, 0.15f);
+        filters[4].setHighpass(0.02f, 0.15f);
+        filters[5].setHighpass(0.02f, 0.15f);
+
 		LASP_LOG("Initialized");
 		return true;
 	}
@@ -94,19 +116,23 @@ extern "C"
 		LASP_LOG("Finalized.");
 	}
 
-	float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetPeakLevel(float duration)
+	float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetPeakLevel(int bufferIndex, float duration)
 	{
-        return ringBuffer.getPeakLevel(static_cast<size_t>(duration * 48000));
+        if (!checkBufferIndex(bufferIndex)) return 0;
+        return ringBuffers[bufferIndex].getPeakLevel(static_cast<size_t>(duration * 48000));
 	}
 
-    float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspCalculateRMS(float duration)
+    float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspCalculateRMS(int bufferIndex, float duration)
     {
-        return ringBuffer.calculateRMS(static_cast<size_t>(duration * 48000));
+        if (!checkBufferIndex(bufferIndex)) return 0;
+        return ringBuffers[bufferIndex].calculateRMS(static_cast<size_t>(duration * 48000));
     }
 
-    int32_t UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspCopyWaveform(float* dest, int32_t length)
+    int32_t UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspCopyWaveform(int bufferIndex, float* dest, int32_t length)
     {
-        ringBuffer.copyRecentFrames(dest, length);
-        return min(length, static_cast<int32_t>(ringBuffer.size()));
+        if (!checkBufferIndex(bufferIndex)) return 0;
+        auto& buffer = ringBuffers[bufferIndex];
+        buffer.copyRecentFrames(dest, length);
+        return min(length, static_cast<int32_t>(buffer.size()));
     }
 }

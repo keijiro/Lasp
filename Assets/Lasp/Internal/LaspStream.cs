@@ -39,9 +39,9 @@ namespace Lasp
             }
         }
 
-        public void Open()
+        public bool Open()
         {
-            PluginEntry.OpenStream(_driver);
+            return PluginEntry.OpenStream(_driver);
         }
 
         public void Close()

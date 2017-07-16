@@ -22,6 +22,9 @@ namespace Lasp
         [DllImport("Lasp", EntryPoint="LaspCloseStream")]
         public static extern void CloseStream(IntPtr driver);
 
+        [DllImport("Lasp", EntryPoint="LaspGetSampleRate")]
+        public static extern float GetSampleRate(IntPtr driver);
+
         [DllImport("Lasp", EntryPoint="LaspGetPeakLevel")]
         public static extern float GetPeakLevel(IntPtr driver, FilterType filter, float duration);
 

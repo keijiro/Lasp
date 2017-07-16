@@ -46,6 +46,11 @@ extern "C"
         reinterpret_cast<Lasp::Driver*>(driver)->CloseStream();
     }
 
+    float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetSampleRate(void* driver)
+    {
+        return reinterpret_cast<Lasp::Driver*>(driver)->getSampleRate();
+    }
+
     float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetPeakLevel(void* driver, int bufferIndex, float duration)
 	{
         auto pd = reinterpret_cast<Lasp::Driver*>(driver);

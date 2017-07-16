@@ -9,5 +9,5 @@
 #else
 #define LASP_LOG(format, ...)
 #define LASP_WARN(format, ...)
-#define LASP_PAERROR(message, error)
+#define LASP_PAERROR(message, error) ((void)error)
 #endif

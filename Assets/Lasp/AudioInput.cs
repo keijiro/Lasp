@@ -43,7 +43,9 @@ namespace Lasp
         static void Initialize()
         {
             _stream = new Lasp.LaspStream();
-            _stream.Open();
+
+            if (!_stream.Open())
+                Debug.LogWarning("LASP: Failed to open the default audio input device.");
 
             LaspTerminator.Create(Terminate);
 

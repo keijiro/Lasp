@@ -145,17 +145,18 @@ namespace Lasp
 
         PaError TryOpenStream(float sampleRate)
         {
-            sampleRate_ = sampleRate;
-            return Pa_OpenDefaultStream(
+            auto err = Pa_OpenDefaultStream(
                 &stream_,
                 1, // mono input
                 0, // no output
                 paFloat32,
-                sampleRate_,
+                sampleRate,
                 paFramesPerBufferUnspecified,
                 AudioCallback,
                 this
             );
+            if (err == paNoError) sampleRate_ = sampleRate;
+            return err;
         }
 
         static int AudioCallback(

@@ -1,18 +1,15 @@
 #pragma once
 
+// A simple implementation of a biquad IIR filter
+// based on the EarLevel Engineering blog article.
+// http://www.earlevel.com/main/2012/11/26/biquad-c-source-code/
+
 #include <cmath>
 
 namespace Lasp
 {
     class BiquadFilter
     {
-    private:
-
-        const float PI_ = 3.14159265358979323846f;
-
-        float a0_, a1_, a2_, b1_, b2_;
-        float z1_, z2_;
-
     public:
 
         BiquadFilter() : z1_(0), z2_(0) {}
@@ -57,5 +54,12 @@ namespace Lasp
             z2_ = i * a2_ - b2_ * o;
             return o;
         }
+
+    private:
+
+        const float PI_ = 3.14159265358979323846f;
+
+        float a0_, a1_, a2_, b1_, b2_;
+        float z1_, z2_;
     };
 }

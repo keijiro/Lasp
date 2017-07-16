@@ -13,13 +13,8 @@ public class Tester : MonoBehaviour
     List<Vector3> _vertices;
     Mesh _mesh;
 
-    static int _instanceCount;
-
     void Start()
     {
-        if (_instanceCount == 0) Lasp.PluginEntry.Initialize();
-        _instanceCount++;
-
         _waveform = new float[512];
 
         _vertices = new List<Vector3>(_waveform.Length);
@@ -30,17 +25,14 @@ public class Tester : MonoBehaviour
 
     void OnDestroy()
     {
-        _instanceCount--;
-        if (_instanceCount == 0) Lasp.PluginEntry.Terminate();
-
         Destroy(_mesh);
     }
 
     void Update()
     {
-        var peak = Lasp.PluginEntry.GetPeakLevel(_filterType, Time.deltaTime);
-        var rms = Lasp.PluginEntry.CalculateRMS(_filterType, Time.deltaTime);
-        Lasp.PluginEntry.CopyWaveform(_filterType, _waveform, _waveform.Length);
+        var peak = Lasp.LaspInput.GetPeakLevel(_filterType);
+        var rms = Lasp.LaspInput.CalculateRMS(_filterType);
+        Lasp.LaspInput.RetrieveWaveform(_filterType, _waveform);
 
         _peakIndicator.localScale = new Vector3(1, peak * _amplify, 1);
         _rmsIndicator.localScale = new Vector3(1, rms * _amplify, 1);

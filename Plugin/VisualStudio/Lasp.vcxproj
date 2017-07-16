@@ -56,6 +56,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;LASP_EXPORTS;PA_USE_WASAPI;PA_ENABLE_DEBUG_OUTPUT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)..\PortAudio\include;$(ProjectDir)..\PortAudio\common;$(ProjectDir)..\PortAudio\os\win;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -82,6 +83,8 @@
     <ClInclude Include="..\PortAudio\include\pa_win_wasapi.h" />
     <ClInclude Include="..\PortAudio\include\portaudio.h" />
     <ClInclude Include="..\Source\BiquadFilter.h" />
+    <ClInclude Include="..\Source\Debug.h" />
+    <ClInclude Include="..\Source\Driver.h" />
     <ClInclude Include="..\Source\IUnityInterface.h" />
     <ClInclude Include="..\Source\RingBuffer.h" />
     <ClInclude Include="..\Source\stdafx.h" />

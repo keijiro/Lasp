@@ -1,17 +1,17 @@
 #pragma once
 
+// Ring buffer class used for storing filtered waveform.
+//
+// Note on thread safety: This class doesn't do any thread synchronization.
+// Although the audio thread may write to the buffer while Unity thread is
+// reading it, it's okay if the size of the buffer is longer enough than
+// read/write length.
+
 #include <array>
+#include <algorithm>
 
 namespace Lasp
 {
-    //
-    // A ring buffer class with minimum functionality.
-    //
-    // Note on thread safety: This class doesn't do any synchronization between the audio
-    // thread and Unity thread. Although the audio thread may write to the buffer while
-    // Unity thread is reading the buffer, it's okay if the size of the buffer is longer
-    // enough than read/write length.
-    //
     class RingBuffer
     {
     public:
@@ -22,7 +22,7 @@ namespace Lasp
             clear();
         }
 
-        size_t size()
+        size_t getSize() const
         {
             return bufferSize_;
         }
@@ -33,9 +33,9 @@ namespace Lasp
             index_ = (index_ + 1) & indexMask_;
         }
 
-        float getPeakLevel(std::size_t range)
+        float getPeakLevel(std::size_t range) const
         {
-            range = min(range, bufferSize_);
+            range = std::min(range, bufferSize_);
             auto base = index_ + bufferSize_ - range;
             auto peak = .0f;
             for (auto offs = 0u; offs < range; offs++)
@@ -43,9 +43,9 @@ namespace Lasp
             return peak;
         }
 
-        float calculateRMS(std::size_t range)
+        float calculateRMS(std::size_t range) const
         {
-            range = min(range, bufferSize_);
+            range = std::min(range, bufferSize_);
             auto base = index_ + bufferSize_ - range;
             auto sq = .0f;
             for (auto offs = 0u; offs < range; offs++)
@@ -62,9 +62,9 @@ namespace Lasp
             index_ = 0;
         }
 
-        void copyRecentFrames(float* dest, std::size_t length)
+        void copyRecentFrames(float* dest, std::size_t length) const
         {
-            length = min(length, bufferSize_);
+            length = std::min(length, bufferSize_);
             auto base = index_ + bufferSize_ - length;
             for (auto offs = 0u; offs < length; offs++)
                 dest[offs] = buffer_[(base + offs) & indexMask_];

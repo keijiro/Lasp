@@ -1,4 +1,7 @@
-﻿using System;
+﻿// LASP - Low-latency Audio Signal Processing plugin for Unity
+// https://github.com/keijiro/Lasp
+
+using System;
 
 namespace Lasp
 {

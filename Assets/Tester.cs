@@ -30,9 +30,9 @@ public class Tester : MonoBehaviour
 
     void Update()
     {
-        var peak = Lasp.LaspInput.GetPeakLevel(_filterType);
-        var rms = Lasp.LaspInput.CalculateRMS(_filterType);
-        Lasp.LaspInput.RetrieveWaveform(_filterType, _waveform);
+        var peak = Lasp.AudioInput.GetPeakLevel(_filterType);
+        var rms = Lasp.AudioInput.CalculateRMS(_filterType);
+        Lasp.AudioInput.RetrieveWaveform(_filterType, _waveform);
 
         _peakIndicator.localScale = new Vector3(1, peak * _amplify, 1);
         _rmsIndicator.localScale = new Vector3(1, rms * _amplify, 1);

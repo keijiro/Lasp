@@ -9,6 +9,7 @@
 
 #include <array>
 #include <algorithm>
+#include <cmath>
 
 namespace Lasp
 {
@@ -22,7 +23,7 @@ namespace Lasp
             clear();
         }
 
-        size_t getSize() const
+        constexpr size_t getSize() const
         {
             return bufferSize_;
         }
@@ -35,7 +36,7 @@ namespace Lasp
 
         float getPeakLevel(std::size_t range) const
         {
-            range = std::min(range, bufferSize_);
+            range = std::min(range, getSize());
             auto base = index_ + bufferSize_ - range;
             auto peak = .0f;
             for (auto offs = 0u; offs < range; offs++)
@@ -45,7 +46,7 @@ namespace Lasp
 
         float calculateRMS(std::size_t range) const
         {
-            range = std::min(range, bufferSize_);
+            range = std::min(range, getSize());
             auto base = index_ + bufferSize_ - range;
             auto sq = .0f;
             for (auto offs = 0u; offs < range; offs++)
@@ -64,7 +65,7 @@ namespace Lasp
 
         void copyRecentFrames(float* dest, std::size_t length) const
         {
-            length = std::min(length, bufferSize_);
+            length = std::min(length, getSize());
             auto base = index_ + bufferSize_ - length;
             for (auto offs = 0u; offs < length; offs++)
                 dest[offs] = buffer_[(base + offs) & indexMask_];
@@ -72,8 +73,7 @@ namespace Lasp
 
     private:
 
-        static const size_t bufferSize_ = 2048;
-        static const size_t indexMask_ = bufferSize_ - 1;
+        enum { bufferSize_ = 2048, indexMask_ = bufferSize_ - 1 };
 
         std::array<float, bufferSize_> buffer_;
         std::size_t index_;

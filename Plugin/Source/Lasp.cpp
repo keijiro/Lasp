@@ -1,8 +1,9 @@
+#include "pa_debugprint.h"
 #include "IUnityInterface.h"
 #include "Driver.h"
 #include <memory>
 
-#if defined(_MSC_VER) 
+#if defined(_MSC_VER)
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <windows.h>
@@ -10,8 +11,15 @@
 
 extern "C"
 {
+    static void DebugPrintCallback(const char* log)
+    {
+        std::printf("%s", log);
+    }
+
 	void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
 	{
+        PaUtil_SetDebugPrintFunction(DebugPrintCallback);
+
     #if defined(_DEBUG) && defined(_MSC_VER)
 		// Create a new console and bind stdout/stderr to it.
 		FILE * pConsole;

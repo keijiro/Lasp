@@ -9,3 +9,5 @@ Desktop.ini
 /Plugin/VisualStudio/.vs
 /Plugin/VisualStudio/x64
 /Plugin/VisualStudio/*.user
+
+xcuserdata

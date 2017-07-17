@@ -30,12 +30,12 @@ public class Tester : MonoBehaviour
 
     void Update()
     {
-        var peak = Lasp.AudioInput.GetPeakLevel(_filterType);
-        var rms = Lasp.AudioInput.CalculateRMS(_filterType);
+        var peak = Lasp.AudioInput.GetPeakLevelDecibel(_filterType) + _amplify;
+        var rms = Lasp.AudioInput.CalculateRMSDecibel(_filterType) + _amplify;
         Lasp.AudioInput.RetrieveWaveform(_filterType, _waveform);
 
-        _peakIndicator.localScale = new Vector3(1, peak * _amplify, 1);
-        _rmsIndicator.localScale = new Vector3(1, rms * _amplify, 1);
+        _peakIndicator.localScale = new Vector3(1, Mathf.Clamp01(1 + peak / 10), 1);
+        _rmsIndicator.localScale = new Vector3(1, Mathf.Clamp01(1 + rms / 10), 1);
 
         UpdateMeshWithWaveform();
         Graphics.DrawMesh(_mesh, transform.localToWorldMatrix, _lineMaterial, gameObject.layer);
@@ -62,7 +62,7 @@ public class Tester : MonoBehaviour
         var scale = 2.0f / _waveform.Length;
 
         for (var i = 0; i < _waveform.Length; i++)
-            _vertices[i] = new Vector3(scale * i - 1, _waveform[i] * _amplify, 0);
+            _vertices[i] = new Vector3(scale * i - 1, _waveform[i], 0);
 
         _mesh.SetVertices(_vertices);
     }

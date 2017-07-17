@@ -18,11 +18,23 @@ namespace Lasp
             return _filterBank[(int)filter].peak;
         }
 
+        // Returns the peak level during the last frame in dBFS.
+        public static float GetPeakLevelDecibel(FilterType filter)
+        {
+            return Mathf.Log10(GetPeakLevel(filter)) * 10;
+        }
+
         // Calculates the RMS level of the last frame.
         public static float CalculateRMS(FilterType filter)
         {
             UpdateState();
             return _filterBank[(int)filter].rms;
+        }
+
+        // Calculates the RMS level of the last frame in dBFS.
+        public static float CalculateRMSDecibel(FilterType filter)
+        {
+            return Mathf.Log10(CalculateRMS(filter)) * 10;
         }
 
         // Retrieve and copy the waveform.

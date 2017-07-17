@@ -145,13 +145,19 @@ namespace Lasp
 
         PaError TryOpenStream(float sampleRate)
         {
-            auto err = Pa_OpenDefaultStream(
+            PaStreamParameters params;
+            params.channelCount = 1;
+            params.device = Pa_GetDefaultInputDevice();
+            params.hostApiSpecificStreamInfo = nullptr;
+            params.sampleFormat = paFloat32;
+            params.suggestedLatency = 0;
+            auto err = Pa_OpenStream(
                 &stream_,
-                1, // mono input
-                0, // no output
-                paFloat32,
+                &params,
+                nullptr,
                 sampleRate,
                 paFramesPerBufferUnspecified,
+                paNoFlag,
                 AudioCallback,
                 this
             );

@@ -87,8 +87,6 @@
     <ClInclude Include="..\Source\Driver.h" />
     <ClInclude Include="..\Source\IUnityInterface.h" />
     <ClInclude Include="..\Source\RingBuffer.h" />
-    <ClInclude Include="..\Source\stdafx.h" />
-    <ClInclude Include="..\Source\targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\PortAudio\common\pa_allocation.c" />
@@ -105,7 +103,7 @@
     <ClCompile Include="..\PortAudio\os\win\pa_win_coinitialize.c" />
     <ClCompile Include="..\PortAudio\os\win\pa_win_hostapis.c" />
     <ClCompile Include="..\PortAudio\os\win\pa_win_util.c" />
-    <ClCompile Include="..\Source\dllmain.cpp">
+    <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
@@ -114,10 +112,6 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\Source\Lasp.cpp" />
-    <ClCompile Include="..\Source\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

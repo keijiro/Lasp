@@ -1,13 +1,18 @@
-#include "stdafx.h"
 #include "IUnityInterface.h"
 #include "Driver.h"
 #include <memory>
+
+#if defined(_MSC_VER) 
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#endif
 
 extern "C"
 {
 	void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
 	{
-    #if defined(_DEBUG)
+    #if defined(_DEBUG) && defined(_MSC_VER)
 		// Create a new console and bind stdout/stderr to it.
 		FILE * pConsole;
 		AllocConsole();
@@ -18,8 +23,8 @@ extern "C"
 
 	void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload()
 	{
-    #if defined(_DEBUG)
-		// Close the stdout/stderr console.
+    #if defined(_DEBUG) && defined(_MSC_VER)
+        // Close the stdout/stderr console.
 		std::fclose(stdout);
         std::fclose(stderr);
         FreeConsole();

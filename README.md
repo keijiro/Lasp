@@ -13,7 +13,15 @@ System Requirements
 
 At the moment, LASP only supports Windows (64 bit) and macOS (64 bit).
 
-How to use
+Installation
+------------
+
+Download one of the unitypackage files from the [Releases] page and import it
+to a project.
+
+[Releases]: https://github.com/keijiro/Lasp/releases
+
+How To Use
 ----------
 
 All of the public methods of LASP are implemented in `Lasp.AudioInput`.
@@ -38,3 +46,8 @@ multiple times without extra cost.
 
 `RetrieveWaveform` copies the recent history of the audio waveform from the
 internal buffer to a given float array.
+
+License
+-------
+
+[MIT](LICENSE.md)

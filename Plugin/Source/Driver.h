@@ -145,12 +145,15 @@ namespace Lasp
 
         PaError TryOpenStream(float sampleRate)
         {
+            auto deviceInfo = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice());
+
             PaStreamParameters params;
             params.channelCount = 1;
             params.device = Pa_GetDefaultInputDevice();
             params.hostApiSpecificStreamInfo = nullptr;
             params.sampleFormat = paFloat32;
-            params.suggestedLatency = 0;
+            params.suggestedLatency = deviceInfo->defaultLowInputLatency;
+
             auto err = Pa_OpenStream(
                 &stream_,
                 &params,
@@ -161,7 +164,9 @@ namespace Lasp
                 AudioCallback,
                 this
             );
+
             if (err == paNoError) sampleRate_ = sampleRate;
+
             return err;
         }
 

@@ -36,9 +36,9 @@ to a project.
 How To Use
 ----------
 
-All the public methods of LASP are implemented in `Lasp.AudioInput` as static
+All the public methods of LASP are implemented in [`AudioInput`] as static
 class methods that can be called without any setup. Each of these methods has a
-`FilterType` argument and returns filtered results based on the argument (or
+[`FilterType`] argument and returns filtered results based on the argument (or
 just returns non-filtered results with `FilterType.Bypass`).
 
 #### GetPeakLevel/GetPeakLevelDecibel
@@ -63,6 +63,9 @@ called multiple times without wasting CPU time.
 `RetrieveWaveform` copies the most recent waveform data from the internal
 buffer to a given float array. The length of the array should be shorter than
 the internal buffer. Less than 1024 would be good.
+
+[`AudioInput`]: Assets/Lasp/AudioInput.cs
+[`FilterType`]: Assets/Lasp/Internal/PluginEntry.cs#L9
 
 Current Limitations
 -------------------

@@ -80,4 +80,4 @@ Current Limitations
 License
 -------
 
-[MIT](LICENSE.md)
+[MIT](LICENSE.txt)

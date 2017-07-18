@@ -6,7 +6,8 @@ easy-to-use audio input functionality that is useful for creating audio
 reactive visuals.
 
 [Demo 1](http://radiumsoftware.tumblr.com/post/163009893309),
-[Demo 2](http://radiumsoftware.tumblr.com/post/163095570430)
+[Demo 2](http://radiumsoftware.tumblr.com/post/163095570430),
+[Demo 3](http://radiumsoftware.tumblr.com/post/163137586857)
 
 Features
 --------

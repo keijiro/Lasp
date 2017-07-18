@@ -16,33 +16,33 @@ extern "C"
         std::printf("%s", log);
     }
 
-	void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
-	{
+    void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
+    {
         PaUtil_SetDebugPrintFunction(DebugPrintCallback);
 
     #if defined(_DEBUG) && defined(_MSC_VER)
-		// Create a new console and bind stdout/stderr to it.
-		FILE * pConsole;
-		AllocConsole();
-		freopen_s(&pConsole, "CONOUT$", "wb", stdout);
+        // Create a new console and bind stdout/stderr to it.
+        FILE * pConsole;
+        AllocConsole();
+        freopen_s(&pConsole, "CONOUT$", "wb", stdout);
         freopen_s(&pConsole, "CONOUT$", "wb", stderr);
     #endif
-	}
+    }
 
-	void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload()
-	{
+    void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload()
+    {
     #if defined(_DEBUG) && defined(_MSC_VER)
         // Close the stdout/stderr console.
-		std::fclose(stdout);
+        std::fclose(stdout);
         std::fclose(stderr);
         FreeConsole();
     #endif
-	}
+    }
 
     void UNITY_INTERFACE_EXPORT * UNITY_INTERFACE_API LaspCreateDriver()
-	{
+    {
         return new Lasp::Driver();
-	}
+    }
 
     void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspDeleteDriver(void* driver)
     {
@@ -65,11 +65,11 @@ extern "C"
     }
 
     float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspGetPeakLevel(void* driver, int bufferIndex, float duration)
-	{
+    {
         auto pd = reinterpret_cast<Lasp::Driver*>(driver);
         auto range = static_cast<size_t>(pd->getSampleRate() * duration);
         return pd->getBuffer(bufferIndex).getPeakLevel(range);
-	}
+    }
 
     float UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspCalculateRMS(void* driver, int bufferIndex, float duration)
     {

@@ -1,15 +1,27 @@
 LASP
 ====
 
-**LASP** is a Unity plugin that provides low-latency audio input functionality.
+**LASP** is a Unity plugin providing low-latency, high-performance and
+easy-to-use audio input functionality that is useful for creating audio
+reactive visuals.
 
 [Demo 1](http://radiumsoftware.tumblr.com/post/163009893309),
 [Demo 2](http://radiumsoftware.tumblr.com/post/163095570430)
 
+Features
+--------
+
+- Low latency (less than 16 ms) audio input.
+- High performance audio analysis (peak level detection, RMS calculation) with
+  C++ native code.
+- Three band (low, middle, high) filter bank useful for detecting rhythmic
+  accents.
+- Supports Windows (WASAPI) and macOS (Core Audio).
+
 System Requirements
 -------------------
 
-- Unity 2017.1
+- Unity 2017.1 or later
 
 At the moment, LASP only supports Windows (64 bit) and macOS (64 bit).
 
@@ -24,28 +36,42 @@ to a project.
 How To Use
 ----------
 
-All of the public methods of LASP are implemented in `Lasp.AudioInput`.
+All the public methods of LASP are implemented in `Lasp.AudioInput` as static
+class methods that can be called without any setup. Each of these methods has a
+`FilterType` argument and returns filtered results based on the argument (or
+just returns non-filtered results with `FilterType.Bypass`).
 
-#### `Lasp.AudioInput.GetPeakLevel`/`GetPeakLevelDecibel`
+#### GetPeakLevel/GetPeakLevelDecibel
 
 `GetPeakLevel` returns the peak level of the audio signal during the last
-frame. `GetPeakLevelDecibel` returns the level in dBFS.
+frame. `GetPeakLevelDecibel` returns the peak level in dBFS.
 
-`AudioInput` automatically caches the results, so these functions can be called
-multiple times without extra cost.
+`AudioInput` automatically caches the results, so that these methods can be
+called multiple times without wasting CPU time.
 
-#### `Lasp.AudioInput.CalculateRMS`/`CalculateRMSDecibel`
+#### CalculateRMS/CalculateRMSDecibel
 
 `CalculateRMS` calculates and returns the RMS (root mean square) of the audio
-signal during the last frame. `CalculateRMSDecibel` returns the level in dBFS.
+signal level during the last frame. `CalculateRMSDecibel` returns the RMS in
+dBFS.
 
-`AudioInput` automatically caches the results, so these functions can be called
-multiple times without extra cost.
+`AudioInput` automatically caches the results, so that these methods can be
+called multiple times without wasting CPU time.
 
-#### `Lasp.AudioInput.RetrieveWaveform`
+#### RetrieveWaveform
 
-`RetrieveWaveform` copies the recent history of the audio waveform from the
-internal buffer to a given float array.
+`RetrieveWaveform` copies the most recent waveform data from the internal
+buffer to a given float array. The length of the array should be shorter than
+the internal buffer. Less than 1024 would be good.
+
+Current Limitations
+-------------------
+
+- LASP always tries to use the system default device for recording. There is no
+  way to use a device that is not assigned as default.
+- LASP only supports monophonic input. Only the first channel (the left channel
+  in case of stereo input) will be enabled when using a multi-channel audio
+  device.
 
 License
 -------

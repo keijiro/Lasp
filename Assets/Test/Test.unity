@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _filterType: 3
-  _amplify: 10
+  _amplify: 16
   _peakIndicator: {fileID: 182632196}
   _rmsIndicator: {fileID: 462222369}
   _lineMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
@@ -346,7 +346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _filterType: 2
-  _amplify: 5
+  _amplify: 4
   _peakIndicator: {fileID: 2026675033}
   _rmsIndicator: {fileID: 1680186477}
   _lineMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
@@ -1140,7 +1140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _filterType: 1
-  _amplify: 5
+  _amplify: 8
   _peakIndicator: {fileID: 1106074908}
   _rmsIndicator: {fileID: 1070605825}
   _lineMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}

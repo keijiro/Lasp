@@ -4,10 +4,11 @@ using System.Collections.Generic;
 public class Tester : MonoBehaviour
 {
     [SerializeField] Lasp.FilterType _filterType;
-    [SerializeField] float _amplify = 1;
     [SerializeField] Transform _peakIndicator;
     [SerializeField] Transform _rmsIndicator;
     [SerializeField] Material _lineMaterial;
+
+    const float kSilence = -40; // -40 dBFS = silence
 
     float[] _waveform;
     List<Vector3> _vertices;
@@ -30,12 +31,15 @@ public class Tester : MonoBehaviour
 
     void Update()
     {
-        var peak = Lasp.AudioInput.GetPeakLevelDecibel(_filterType) + _amplify;
-        var rms = Lasp.AudioInput.CalculateRMSDecibel(_filterType) + _amplify;
+        var peak = Lasp.AudioInput.GetPeakLevelDecibel(_filterType);
+        var rms = Lasp.AudioInput.CalculateRMSDecibel(_filterType);
         Lasp.AudioInput.RetrieveWaveform(_filterType, _waveform);
 
-        _peakIndicator.localScale = new Vector3(1, Mathf.Clamp01(1 + peak / 10), 1);
-        _rmsIndicator.localScale = new Vector3(1, Mathf.Clamp01(1 + rms / 10), 1);
+        peak = Mathf.Clamp01(1 - peak / kSilence);
+        rms = Mathf.Clamp01(1 - rms / kSilence);
+
+        _peakIndicator.localScale = new Vector3(1, peak, 1);
+        _rmsIndicator.localScale = new Vector3(1, rms, 1);
 
         UpdateMeshWithWaveform();
         Graphics.DrawMesh(_mesh, transform.localToWorldMatrix, _lineMaterial, gameObject.layer);

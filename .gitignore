@@ -12,3 +12,5 @@ Lasp.unitypackage
 /Plugin/VisualStudio/*.user
 
 xcuserdata
+
+/Plugin/Linux/build

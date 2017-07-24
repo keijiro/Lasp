@@ -23,7 +23,7 @@ namespace Lasp
             clear();
         }
 
-        constexpr size_t getSize() const
+        size_t getSize() const
         {
             return bufferSize_;
         }
@@ -40,7 +40,7 @@ namespace Lasp
             auto base = index_ + bufferSize_ - range;
             auto peak = .0f;
             for (auto offs = 0u; offs < range; offs++)
-                peak = std::fmaxf(peak, std::fabsf(buffer_[(base + offs) & indexMask_]));
+                peak = std::fmaxf(peak, fabsf(buffer_[(base + offs) & indexMask_]));
             return peak;
         }
 
@@ -54,7 +54,7 @@ namespace Lasp
                 auto v = buffer_[(base + offs) & indexMask_];
                 sq += v * v;
             }
-            return std::sqrtf(sq / range);
+            return sqrtf(sq / range);
         }
 
         void clear()

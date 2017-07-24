@@ -18,6 +18,11 @@ SET(LASP_INCLUDES
   ../PortAudio/include/pa_linux_alsa.h
   ../PortAudio/include/portaudio.h
   ../PortAudio/os/unix/pa_unix_util.h
+  ../Source/BiquadFilter.h
+  ../Source/Debug.h
+  ../Source/Driver.h
+  ../Source/IUnityInterface.h
+  ../Source/RingBuffer.h
 )
 
 SET(LASP_SOURCES
@@ -34,6 +39,7 @@ SET(LASP_SOURCES
   ../PortAudio/hostapi/alsa/pa_linux_alsa.c
   ../PortAudio/os/unix/pa_unix_hostapis.c
   ../PortAudio/os/unix/pa_unix_util.c
+  ../Source/Lasp.cpp
 )
 
 SET(LASP_INCLUDE_PATHS ../PortAudio/include ../PortAudio/common ../PortAudio/os/unix ${ALSA_INCLUDE_DIRS})
@@ -42,7 +48,9 @@ SET(LASP_COMPILE_DEFINITIONS PA_USE_ALSA)
 SET(LASP_LIBRARY_DEPENDENCIES ${ALSA_LIBRARIES} m pthread)
 SET(LASP_PKGCONFIG_LDFLAGS "-lasound -lm -lpthread")
 
-SET(LASP_COMPILE_DEFINITIONS ${LASP_COMPILE_DEFINITIONS} PA_ENABLE_DEBUG_OUTPUT)
+SET(LASP_COMPILE_DEFINITIONS ${LASP_COMPILE_DEFINITIONS} _DEBUG PA_ENABLE_DEBUG_OUTPUT)
+
+SET(CMAKE_CXX_STANDARD 11)
 
 ADD_LIBRARY(lasp SHARED ${LASP_INCLUDES} ${LASP_SOURCES})
 SET_PROPERTY(TARGET lasp APPEND_STRING PROPERTY COMPILE_DEFINITIONS ${LASP_COMPILE_DEFINITIONS})

@@ -2,7 +2,7 @@
 #include "IUnityInterface.h"
 #include "Driver.h"
 #include <memory>
-
+#include <string>
 
 namespace
 {

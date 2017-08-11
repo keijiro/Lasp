@@ -41,9 +41,9 @@ namespace Lasp
 }
 
 #if defined(_DEBUG)
-#define LASP_LOG(format, ...) Lasp::Debug::log("LASP - " format "\n", ##__VA_ARGS__)
-#define LASP_WARN(format, ...) Lasp::Debug::log("LASP warning - " format "\n", ##__VA_ARGS__)
-#define LASP_PAERROR(message, error) Lasp::Debug::log("LASP error - %s (PortAudio: %s)\n", message, Pa_GetErrorText(error))
+#define LASP_LOG(format, ...) Lasp::Debug::log("LASP - " format, ##__VA_ARGS__)
+#define LASP_WARN(format, ...) Lasp::Debug::log("LASP warning - " format, ##__VA_ARGS__)
+#define LASP_PAERROR(message, error) Lasp::Debug::log("LASP error - %s (PortAudio: %s)", message, Pa_GetErrorText(error))
 #else
 #define LASP_LOG(format, ...)
 #define LASP_WARN(format, ...)

@@ -8,7 +8,10 @@ namespace
 {
     void PaPrintCallback(const char* log)
     {
-        LASP_LOG("%s", log);
+        std::string temp(log);
+        // Remove tailing newline character.
+        if (!temp.empty() && temp.back() == '\n') temp.pop_back();
+        Lasp::Debug::log("PortAudio> %s", temp.c_str());
     }
 }
 

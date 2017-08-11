@@ -3,40 +3,29 @@
 #include "Driver.h"
 #include <memory>
 
-#if defined(_MSC_VER)
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-#endif
+
+namespace
+{
+    void PaPrintCallback(const char* log)
+    {
+        LASP_LOG("%s", log);
+    }
+}
 
 extern "C"
 {
-    static void DebugPrintCallback(const char* log)
-    {
-        std::printf("%s", log);
-    }
-
     void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
     {
-        PaUtil_SetDebugPrintFunction(DebugPrintCallback);
-
-    #if defined(_DEBUG) && defined(_MSC_VER)
-        // Create a new console and bind stdout/stderr to it.
-        FILE * pConsole;
-        AllocConsole();
-        freopen_s(&pConsole, "CONOUT$", "wb", stdout);
-        freopen_s(&pConsole, "CONOUT$", "wb", stderr);
-    #endif
+        PaUtil_SetDebugPrintFunction(PaPrintCallback);
     }
 
     void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload()
     {
-    #if defined(_DEBUG) && defined(_MSC_VER)
-        // Close the stdout/stderr console.
-        std::fclose(stdout);
-        std::fclose(stderr);
-        FreeConsole();
-    #endif
+    }
+
+    void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspReplaceLogger(Lasp::Debug::LogFunction p)
+    {
+        Lasp::Debug::setLogFunction(p);
     }
 
     void UNITY_INTERFACE_EXPORT * UNITY_INTERFACE_API LaspCreateDriver()

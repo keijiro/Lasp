@@ -10,6 +10,8 @@ namespace Lasp
 
     public static class PluginEntry
     {
+        #region Plugin interface
+
         [DllImport("Lasp", EntryPoint="LaspCreateDriver")]
         public static extern IntPtr CreateDriver();
 
@@ -33,5 +35,33 @@ namespace Lasp
 
         [DllImport("Lasp", EntryPoint="LaspRetrieveWaveform")]
         public static extern int RetrieveWaveform(IntPtr driver, FilterType filter, float[] dest, int length);
+
+        #endregion
+
+        #region Debug helpers
+
+        public static void SetupLogger()
+        {
+            var del = (PrintDelegate)Log;
+            var ptr = Marshal.GetFunctionPointerForDelegate(del);
+            ReplaceLogger(ptr);
+        }
+
+        [DllImport("Lasp", EntryPoint="LaspReplaceLogger")]
+        public static extern void ReplaceLogger(IntPtr logger);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void PrintDelegate(string message);
+
+        static void Log(string message)
+        {
+        #if UNITY_EDITOR
+            UnityEngine.Debug.Log(message);
+        #else
+            System.Console.WriteLine(message);
+        #endif
+        }
+
+        #endregion
     }
 }

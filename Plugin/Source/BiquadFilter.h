@@ -16,7 +16,7 @@ namespace Lasp
 
         void setLowpass(float Fc, float Q)
         {
-            auto K = std::tanf(PI_ * Fc);
+            auto K = tanf(PI_ * Fc);
             auto norm = 1 / (1 + K / Q + K * K);
             a0_ = K * K * norm;
             a1_ = 2 * a0_;
@@ -27,7 +27,7 @@ namespace Lasp
 
         void setBandpass(float Fc, float Q)
         {
-            auto K = std::tanf(PI_ * Fc);
+            auto K = tanf(PI_ * Fc);
             auto norm = 1 / (1 + K / Q + K * K);
             a0_ = K / Q * norm;
             a1_ = 0;
@@ -38,7 +38,7 @@ namespace Lasp
 
         void setHighpass(float Fc, float Q)
         {
-            auto K = std::tanf(PI_ * Fc);
+            auto K = tanf(PI_ * Fc);
             auto norm = 1 / (1 + K / Q + K * K);
             a0_ = norm;
             a1_ = -2 * a0_;

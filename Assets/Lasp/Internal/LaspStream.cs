@@ -16,6 +16,7 @@ namespace Lasp
     {
         public LaspStream()
         {
+            PluginEntry.SetupLogger();
             _driver = PluginEntry.CreateDriver();
         }
 

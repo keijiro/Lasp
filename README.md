@@ -24,8 +24,7 @@ System Requirements
 
 - Unity 2017.1 or later
 
-At the moment, LASP only supports 64-bit desktop platforms (Windows, macOS and
-Linux).
+At the moment, LASP only supports desktop platforms (Windows, macOS and Linux).
 
 Installation
 ------------

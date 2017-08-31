@@ -20,7 +20,7 @@ PluginImporter:
           Exclude Linux: 1
           Exclude Linux64: 1
           Exclude LinuxUniversal: 1
-          Exclude OSXIntel: 1
+          Exclude OSXIntel: 0
           Exclude OSXIntel64: 0
           Exclude OSXUniversal: 0
           Exclude Win: 1
@@ -38,7 +38,7 @@ PluginImporter:
       second:
         enabled: 1
         settings:
-          CPU: x86_64
+          CPU: AnyCPU
           DefaultValueInitialized: true
           OS: OSX
     data:
@@ -80,9 +80,9 @@ PluginImporter:
       first:
         Standalone: OSXIntel
       second:
-        enabled: 0
+        enabled: 1
         settings:
-          CPU: None
+          CPU: AnyCPU
     data:
       first:
         Standalone: OSXIntel64
@@ -96,7 +96,7 @@ PluginImporter:
       second:
         enabled: 1
         settings:
-          CPU: x86_64
+          CPU: AnyCPU
     data:
       first:
         Standalone: Win

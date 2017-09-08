@@ -1,25 +1,12 @@
-#include "pa_debugprint.h"
 #include "IUnityInterface.h"
 #include "Driver.h"
 #include <memory>
 #include <string>
 
-namespace
-{
-    void PaPrintCallback(const char* log)
-    {
-        std::string temp(log);
-        // Remove tailing newline character.
-        if (!temp.empty() && temp.back() == '\n') temp.pop_back();
-        Lasp::Debug::log("PortAudio> %s", temp.c_str());
-    }
-}
-
 extern "C"
 {
     void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginLoad(IUnityInterfaces* unityInterfaces)
     {
-        PaUtil_SetDebugPrintFunction(PaPrintCallback);
     }
 
     void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API UnityPluginUnload()

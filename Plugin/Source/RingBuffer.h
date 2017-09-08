@@ -54,7 +54,7 @@ namespace Lasp
                 auto v = buffer_[(base + offs) & indexMask_];
                 sq += v * v;
             }
-            return sqrtf(sq / range);
+            return sq == 0 ? 0 : sqrtf(sq / range);
         }
 
         void clear()

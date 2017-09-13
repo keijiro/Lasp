@@ -1,23 +1,12 @@
-LASP
-====
+LASP Loopback
+=============
 
-**LASP** is a Unity plugin providing low-latency, high-performance and
-easy-to-use audio input functionality that is useful for creating audio
-reactive visuals.
+**LASP Loopback** is an experimental build of **LASP** that allows Unity apps
+analyzing its audio output via a custom mixer effect.
 
-[Demo 1](http://radiumsoftware.tumblr.com/post/163009893309),
-[Demo 2](http://radiumsoftware.tumblr.com/post/163095570430),
-[Demo 3](http://radiumsoftware.tumblr.com/post/163137586857)
+For details of the LASP plugin, please check [the original branch].
 
-Features
---------
-
-- Low latency (less than 16 ms) audio input.
-- High performance audio analysis (peak level detection, RMS calculation) with
-  C++ native code.
-- Three band (low, middle, high) filter bank useful for detecting rhythmic
-  accents.
-- Supports Windows (WASAPI), macOS (Core Audio) and Linux (ALSA).
+[the original branch]: https://github.com/keijiro/Lasp
 
 System Requirements
 -------------------
@@ -29,53 +18,41 @@ At the moment, LASP only supports desktop platforms (Windows, macOS and Linux).
 Installation
 ------------
 
-Download one of the unitypackage files from the [Releases] page and import it
-to a project.
+1. Before installing LASP Loopback, the original version of LASP has to be
+   removed from the project to avoid conflicts. Remove `Assets/Lasp` diretory
+   if it exists.
+1. Download [the unitypackage file] and import it to the project.
 
-[Releases]: https://github.com/keijiro/Lasp/releases
+[the unitypackage file]: LaspLoopback.unitypackage
 
 How To Use
 ----------
 
-All the public methods of LASP are implemented in [`AudioInput`] as static
-class methods that can be called without any setup. Each of these methods has a
-[`FilterType`] argument and returns filtered results based on the argument (or
-just returns non-filtered results with `FilterType.Bypass`).
+LASP Loopback uses a custom audio effect to route audio signals into the
+plugin. This audio effect has to be added to one of the audio tracks in the
+audio mixer used in the scene. Typically, it's added to the master track.
 
-#### GetPeakLevel/GetPeakLevelDecibel
+!(screenshot)[https://i.imgur.com/7U11DwK.png]
 
-`GetPeakLevel` returns the peak level of the audio signal during the last
-frame. `GetPeakLevelDecibel` returns the peak level in dBFS.
+The basic functionalities of LASP Lookback are almost the same to the original
+LASP plugin. Please refer to the documentation in the original branch for
+further usage.
 
-`AudioInput` automatically caches the results, so that these methods can be
-called multiple times without wasting CPU time.
+TIPS
+----
 
-#### CalculateRMS/CalculateRMSDecibel
+LASP Loopback can be used with [KlakLASP]. It's convenient to create audio
+reactive behaviors.
 
-`CalculateRMS` calculates and returns the RMS (root mean square) of the audio
-signal level during the last frame. `CalculateRMSDecibel` returns the RMS in
-dBFS.
-
-`AudioInput` automatically caches the results, so that these methods can be
-called multiple times without wasting CPU time.
-
-#### RetrieveWaveform
-
-`RetrieveWaveform` copies the most recent waveform data from the internal
-buffer to a given float array. The length of the array should be shorter than
-the internal buffer. Less than 1024 would be good.
-
-[`AudioInput`]: Assets/Lasp/AudioInput.cs
-[`FilterType`]: Assets/Lasp/Internal/PluginEntry.cs#L9
+[KlakLASP]: https://github.com/keijiro/KlakLasp
 
 Current Limitations
 -------------------
 
-- LASP always tries to use the system default device for recording. There is no
-  way to use a device that is not assigned as default.
-- LASP only supports monophonic input. Only the first channel (the left channel
-  in case of stereo input) will be enabled when using a multi-channel audio
-  device.
+- LASP loopback can't be used with the original LASP plugin simultaneously.
+- In most cases, the latency of LASP Loopback is less than the latency of
+  Unity's audio output. The DSP buffer size in the audio settings should be
+  tweaked to reduce the latency between them.
 
 License
 -------

@@ -12,28 +12,28 @@ namespace Lasp
     {
         #region Plugin interface
 
-        [DllImport("Lasp", EntryPoint="LaspCreateDriver")]
+        [DllImport("AudioPluginLaspLoopback", EntryPoint="LaspCreateDriver")]
         public static extern IntPtr CreateDriver();
 
-        [DllImport("Lasp", EntryPoint="LaspDeleteDriver")]
+        [DllImport("AudioPluginLaspLoopback", EntryPoint="LaspDeleteDriver")]
         public static extern void DeleteDriver(IntPtr driver);
 
-        [DllImport("Lasp", EntryPoint="LaspOpenStream")]
+        [DllImport("AudioPluginLaspLoopback", EntryPoint="LaspOpenStream")]
         public static extern bool OpenStream(IntPtr driver);
 
-        [DllImport("Lasp", EntryPoint="LaspCloseStream")]
+        [DllImport("AudioPluginLaspLoopback", EntryPoint="LaspCloseStream")]
         public static extern void CloseStream(IntPtr driver);
 
-        [DllImport("Lasp", EntryPoint="LaspGetSampleRate")]
+        [DllImport("AudioPluginLaspLoopback", EntryPoint="LaspGetSampleRate")]
         public static extern float GetSampleRate(IntPtr driver);
 
-        [DllImport("Lasp", EntryPoint="LaspGetPeakLevel")]
+        [DllImport("AudioPluginLaspLoopback", EntryPoint="LaspGetPeakLevel")]
         public static extern float GetPeakLevel(IntPtr driver, FilterType filter, float duration);
 
-        [DllImport("Lasp", EntryPoint="LaspCalculateRMS")]
+        [DllImport("AudioPluginLaspLoopback", EntryPoint="LaspCalculateRMS")]
         public static extern float CalculateRMS(IntPtr driver, FilterType filter, float duration);
 
-        [DllImport("Lasp", EntryPoint="LaspRetrieveWaveform")]
+        [DllImport("AudioPluginLaspLoopback", EntryPoint="LaspRetrieveWaveform")]
         public static extern int RetrieveWaveform(IntPtr driver, FilterType filter, float[] dest, int length);
 
         #endregion
@@ -47,7 +47,7 @@ namespace Lasp
             ReplaceLogger(ptr);
         }
 
-        [DllImport("Lasp", EntryPoint="LaspReplaceLogger")]
+        [DllImport("AudioPluginLaspLoopback", EntryPoint="LaspReplaceLogger")]
         public static extern void ReplaceLogger(IntPtr logger);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

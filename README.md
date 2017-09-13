@@ -18,10 +18,11 @@ At the moment, LASP only supports desktop platforms (Windows, macOS and Linux).
 Installation
 ------------
 
-1. Before installing LASP Loopback, the original version of LASP has to be
-   removed from the project to avoid conflicts. Remove `Assets/Lasp` diretory
-   if it exists.
-1. Download [the unitypackage file] and import it to the project.
+Download [the unitypackage file] and import it to the project.
+
+Before installing the package, the original version of LASP has to be removed
+from the project to avoid conflicts. Remove `Assets/Lasp` diretory if it
+exists.
 
 [the unitypackage file]: LaspLoopback.unitypackage
 
@@ -32,7 +33,7 @@ LASP Loopback uses a custom audio effect to route audio signals into the
 plugin. This audio effect has to be added to one of the audio tracks in the
 audio mixer used in the scene. Typically, it's added to the master track.
 
-!(screenshot)[https://i.imgur.com/7U11DwK.png]
+![screenshot](https://i.imgur.com/7U11DwK.png)
 
 The basic functionalities of LASP Lookback are almost the same to the original
 LASP plugin. Please refer to the documentation in the original branch for

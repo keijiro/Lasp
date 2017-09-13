@@ -13,32 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="PortAudio">
-      <UniqueIdentifier>{e2f33c7a-31c1-4161-b358-e87e3ac79b07}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PortAudio\common">
-      <UniqueIdentifier>{ffc10ffd-c105-4cfb-b057-0438e69828f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PortAudio\hostapi">
-      <UniqueIdentifier>{54b9d571-8bd7-45f3-a374-0ea9e3fd2bda}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PortAudio\os">
-      <UniqueIdentifier>{2c5ed9ee-f374-44a1-ba21-b788776b7bd8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PortAudio\os\win">
-      <UniqueIdentifier>{f27b3cce-f2b9-496d-b043-115de47e94f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PortAudio\include">
-      <UniqueIdentifier>{911ddd1e-f073-49b7-ad36-818765841e85}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\PortAudio\include\pa_win_wasapi.h">
-      <Filter>PortAudio\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\PortAudio\include\portaudio.h">
-      <Filter>PortAudio\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\IUnityInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,6 +30,9 @@
     <ClInclude Include="..\Source\Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\AudioPluginInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Lasp.cpp">
@@ -62,47 +41,8 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_allocation.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_converters.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_cpuload.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_debugprint.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_dither.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_front.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_process.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_ringbuffer.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_stream.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\common\pa_trace.c">
-      <Filter>PortAudio\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\hostapi\wasapi\pa_win_wasapi.c">
-      <Filter>PortAudio\hostapi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\os\win\pa_win_coinitialize.c">
-      <Filter>PortAudio\os\win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\os\win\pa_win_hostapis.c">
-      <Filter>PortAudio\os\win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PortAudio\os\win\pa_win_util.c">
-      <Filter>PortAudio\os\win</Filter>
+    <ClCompile Include="..\Source\LoopbackEffect.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

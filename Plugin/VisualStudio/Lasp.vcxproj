@@ -80,8 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\PortAudio\include\pa_win_wasapi.h" />
-    <ClInclude Include="..\PortAudio\include\portaudio.h" />
+    <ClInclude Include="..\Source\AudioPluginInterface.h" />
     <ClInclude Include="..\Source\BiquadFilter.h" />
     <ClInclude Include="..\Source\Debug.h" />
     <ClInclude Include="..\Source\Driver.h" />
@@ -89,20 +88,7 @@
     <ClInclude Include="..\Source\RingBuffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\PortAudio\common\pa_allocation.c" />
-    <ClCompile Include="..\PortAudio\common\pa_converters.c" />
-    <ClCompile Include="..\PortAudio\common\pa_cpuload.c" />
-    <ClCompile Include="..\PortAudio\common\pa_debugprint.c" />
-    <ClCompile Include="..\PortAudio\common\pa_dither.c" />
-    <ClCompile Include="..\PortAudio\common\pa_front.c" />
-    <ClCompile Include="..\PortAudio\common\pa_process.c" />
-    <ClCompile Include="..\PortAudio\common\pa_ringbuffer.c" />
-    <ClCompile Include="..\PortAudio\common\pa_stream.c" />
-    <ClCompile Include="..\PortAudio\common\pa_trace.c" />
-    <ClCompile Include="..\PortAudio\hostapi\wasapi\pa_win_wasapi.c" />
-    <ClCompile Include="..\PortAudio\os\win\pa_win_coinitialize.c" />
-    <ClCompile Include="..\PortAudio\os\win\pa_win_hostapis.c" />
-    <ClCompile Include="..\PortAudio\os\win\pa_win_util.c" />
+    <ClCompile Include="..\Source\LoopbackEffect.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

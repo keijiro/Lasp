@@ -27,7 +27,7 @@ namespace
         unsigned int length, int inChannels, int outChannels
     )
     {
-        Lasp::Driver::updateSampleRate(state->samplerate);
+        Lasp::Driver::updateSampleRate(static_cast<float>(state->samplerate));
 
         auto norm = 1.0f / outChannels;
         auto offs = 0u;

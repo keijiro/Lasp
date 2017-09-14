@@ -77,6 +77,15 @@ Current Limitations
   in case of stereo input) will be enabled when using a multi-channel audio
   device.
 
+Related Projects
+----------------
+
+**[LASP Loopback]** - A special build that supports analyzing audio output from
+Unity instead of external audio sources. This is useful to create audio
+reactive behaviors with internal audio sources.
+
+[LASP Loopback]: https://github.com/keijiro/Lasp/tree/loopback
+
 License
 -------
 

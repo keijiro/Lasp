@@ -1,0 +1,14 @@
+LIBRARY
+
+EXPORTS
+    UnityPluginLoad
+    UnityPluginUnload
+    LaspReplaceLogger
+    LaspCreateDriver
+    LaspDeleteDriver
+    LaspOpenStream
+    LaspCloseStream
+    LaspGetSampleRate
+    LaspGetPeakLevel
+    LaspCalculateRMS
+    LaspRetrieveWaveform

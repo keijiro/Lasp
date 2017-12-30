@@ -105,4 +105,9 @@
       <Filter>PortAudio\os\win</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Lasp.def">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

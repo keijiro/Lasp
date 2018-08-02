@@ -1,0 +1,12 @@
+{
+    "name": "Lasp.Editor",
+    "references": [
+        "Lasp"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

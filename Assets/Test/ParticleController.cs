@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class ParticleController : MonoBehaviour
 {
-    [SerializeField] Lasp.FilterType _filterType;
-    [SerializeField] float _amplify = 0;
+    public float input { get; set; }
 
     ParticleSystem.EmissionModule _emission;
     ParticleSystem.ShapeModule _shape;
@@ -24,9 +23,7 @@ public class ParticleController : MonoBehaviour
 
     void Update()
     {
-        var rms = Lasp.AudioInput.CalculateRMSDecibel(_filterType) + _amplify;
-        var level = 1 + rms * 0.1f;
-        _emission.rateOverTime = Mathf.Clamp01(level * 5) * _originalEmission;
-        _shape.radius = Mathf.Clamp01(level) * _originalRadius;
+        _emission.rateOverTime = input * _originalEmission;
+        _shape.radius = input * _originalRadius;
     }
 }

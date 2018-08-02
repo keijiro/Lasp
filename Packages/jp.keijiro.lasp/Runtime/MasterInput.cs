@@ -7,7 +7,7 @@ namespace Lasp
 {
     // High-level audio input interface that provides the basic functionality
     // of LASP. 
-    public static class AudioInput
+    public static class MasterInput
     {
         #region Public methods
 

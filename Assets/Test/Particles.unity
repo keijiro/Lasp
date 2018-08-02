@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 144958676}
   - component: {fileID: 144958675}
   - component: {fileID: 144958674}
+  - component: {fileID: 144958678}
   m_Layer: 0
   m_Name: Particle System (High)
   m_TagString: Untagged
@@ -142,8 +143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66563c50b49c6694cb5bdfbe25c99816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _filterType: 3
-  _amplify: 20
 --- !u!199 &144958675
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -4765,6 +4764,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &144958678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 144958673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb406d4909d1d44fa489d30cba6c3fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _filterType: 3
+  _autoGain: 1
+  _gain: 6
+  _dynamicRange: 12
+  _holdAndFallDown: 1
+  _fallDownSpeed: 0.3
+  _outputEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 144958674}
+        m_MethodName: set_input
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Lasp.LevelMonitor+FloatEvent, Lasp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &443009355
 GameObject:
   m_ObjectHideFlags: 0
@@ -4776,6 +4808,7 @@ GameObject:
   - component: {fileID: 443009357}
   - component: {fileID: 443009356}
   - component: {fileID: 443009359}
+  - component: {fileID: 443009360}
   m_Layer: 0
   m_Name: Particle System (Low)
   m_TagString: Untagged
@@ -9415,8 +9448,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66563c50b49c6694cb5bdfbe25c99816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &443009360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 443009355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb406d4909d1d44fa489d30cba6c3fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _filterType: 1
-  _amplify: 8
+  _autoGain: 1
+  _gain: 6
+  _dynamicRange: 12
+  _holdAndFallDown: 1
+  _fallDownSpeed: 0.3
+  _outputEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 443009359}
+        m_MethodName: set_input
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Lasp.LevelMonitor+FloatEvent, Lasp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &739515039
 GameObject:
   m_ObjectHideFlags: 0
@@ -9470,6 +9534,7 @@ GameObject:
   - component: {fileID: 847340042}
   - component: {fileID: 847340041}
   - component: {fileID: 847340040}
+  - component: {fileID: 847340044}
   m_Layer: 0
   m_Name: Particle System (Middle)
   m_TagString: Untagged
@@ -9488,8 +9553,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66563c50b49c6694cb5bdfbe25c99816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _filterType: 2
-  _amplify: 4
 --- !u!199 &847340041
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -14111,6 +14174,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &847340044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 847340039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb406d4909d1d44fa489d30cba6c3fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _filterType: 2
+  _autoGain: 1
+  _gain: 6
+  _dynamicRange: 12
+  _holdAndFallDown: 1
+  _fallDownSpeed: 0.3
+  _outputEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 847340040}
+        m_MethodName: set_input
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Lasp.LevelMonitor+FloatEvent, Lasp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &2092438807
 GameObject:
   m_ObjectHideFlags: 0

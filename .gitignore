@@ -19,8 +19,8 @@ Desktop.ini
 /Temp
 
 # Visual Studio
-/Plugin/Windows/.vs
-/Plugin/Windows/x64
+/Plugin/VisualStudio/.vs
+/Plugin/VisualStudio/x64
 
 # Xcode
 xcuserdata

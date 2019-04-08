@@ -146,6 +146,7 @@ namespace Lasp
         PaError TryOpenStream(float sampleRate)
         {
             auto deviceInfo = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice());
+			if (deviceInfo == nullptr) return paDeviceUnavailable;
 
             PaStreamParameters params;
             params.channelCount = 1;

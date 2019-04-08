@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 public class Tester : MonoBehaviour
 {
-    [SerializeField] Lasp.FilterType _filterType;
-    [SerializeField] Transform _peakIndicator;
-    [SerializeField] Transform _rmsIndicator;
-    [SerializeField] Material _lineMaterial;
+    [SerializeField] Lasp.FilterType _filterType = Lasp.FilterType.Bypass;
+    [SerializeField] Transform _peakIndicator = null;
+    [SerializeField] Transform _rmsIndicator = null;
+    [SerializeField] Material _lineMaterial = null;
 
     const float kSilence = -40; // -40 dBFS = silence
 

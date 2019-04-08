@@ -6,20 +6,25 @@ Desktop.ini
 .DS_Store
 
 # Code Editors
-.idea
-.vscode
-*.csproj
-*.sln
+/.idea
+/.vscode
+/*.csproj
+/*.sln
 *.swp
+*.vcxproj.user
 
 # Unity
 /Library
+/Logs
 /Temp
 
-/Plugin/VisualStudio/.vs
-/Plugin/VisualStudio/x64
-/Plugin/VisualStudio/*.user
+# Visual Studio
+/Plugin/Windows/.vs
+/Plugin/Windows/x64
 
+# Xcode
 xcuserdata
+xcshareddata
 
+# Linux
 /Plugin/Linux/build

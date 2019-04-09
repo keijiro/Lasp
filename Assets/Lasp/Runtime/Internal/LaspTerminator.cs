@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace Lasp
 {
-    // An internal component that is used to automatically terminates the LASP
-    // audio input stream.
+    // Internal utility used to automatically terminate an input stream
     internal sealed class LaspTerminator : MonoBehaviour
     {
         public static void Create(System.Action callback)

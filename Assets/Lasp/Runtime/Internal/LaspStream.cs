@@ -9,10 +9,10 @@ namespace Lasp
     //
     // NOTE: Even though the unmanaged resources are automatically disposed
     // by the finalizer, it's strongly recommended to explicitly call Dispose()
-    // from owner because the finalizer is not necessarily invoked in the main
-    // thread and the driver resources may not be correctly released from non-
-    // main threads. Calling Dispose() is the safest way to clean things up.
-    public class LaspStream : IDisposable
+    // from its owner because the finalizer may be invoked from a non-main
+    // thread that can introduce threading issues. Calling Dispose() is the
+    // safest way to clean things up.
+    internal sealed class LaspStream : IDisposable
     {
         public LaspStream()
         {
@@ -22,16 +22,16 @@ namespace Lasp
 
         ~LaspStream()
         {
-            Dispose(false);
+            ReleaseUnmanagedResources();
         }
 
         public void Dispose()
         {
-            Dispose(true);
+            ReleaseUnmanagedResources();
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        void ReleaseUnmanagedResources()
         {
             if (_driver != IntPtr.Zero)
             {

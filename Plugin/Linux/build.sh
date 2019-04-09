@@ -1,8 +1,17 @@
+#!/bin/sh
+
+DEBUG=0
+
+if [ $DEBUG -eq 1 ]; then
+  DEBUG_OPT="-D _DEBUG -D PA_ENABLE_DEBUG_OUTPUT"
+else
+  DEBUG_OPT=""
+fi
+
 gcc -Wall \
     -O2 -fPIC -Wl,--gc-sections \
     -D PA_USE_ALSA \
-    -D _DEBUG \
-    -D PA_ENABLE_DEBUG_OUTPUT \
+    $DEBUG_OPT \
     -I ../PortAudio/include \
     -I ../PortAudio/common \
     -I ../PortAudio/os/unix \

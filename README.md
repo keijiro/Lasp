@@ -22,7 +22,7 @@ Features
 System Requirements
 -------------------
 
-- Unity 2017.1 or later
+- Unity 2018.3 or later
 
 At the moment, LASP only supports desktop platforms (Windows, macOS and Linux).
 
@@ -37,7 +37,7 @@ to a project.
 How To Use
 ----------
 
-All the public methods of LASP are implemented in [`AudioInput`] as static
+All the public methods of LASP are implemented in [`MasterInput`] as static
 class methods that can be called without any setup. Each of these methods has a
 [`FilterType`] argument and returns filtered results based on the argument (or
 just returns non-filtered results with `FilterType.Bypass`).
@@ -62,11 +62,11 @@ called multiple times without wasting CPU time.
 #### RetrieveWaveform
 
 `RetrieveWaveform` copies the most recent waveform data from the internal
-buffer to a given float array. The length of the array should be shorter than
-the internal buffer. Less than 1024 would be good.
+buffer to a given float array. The length of the array must be shorter than the
+internal buffer. It's safe to use 1024 or less.
 
-[`AudioInput`]: Assets/Lasp/AudioInput.cs
-[`FilterType`]: Assets/Lasp/Internal/PluginEntry.cs#L9
+[`MasterInput`]: Assets/Lasp/Runtime/MasterInput.cs#L16
+[`FilterType`]: Assets/Lasp/Runtime/MasterInput.cs#L9
 
 Current Limitations
 -------------------
@@ -76,17 +76,3 @@ Current Limitations
 - LASP only supports monophonic input. Only the first channel (the left channel
   in case of stereo input) will be enabled when using a multi-channel audio
   device.
-
-Related Projects
-----------------
-
-**[LASP Loopback]** - A special build that supports analyzing audio output from
-Unity instead of external audio sources. This is useful to create audio
-reactive behaviors with internal audio sources.
-
-[LASP Loopback]: https://github.com/keijiro/Lasp/tree/loopback
-
-License
--------
-
-[MIT](LICENSE.txt)

@@ -1,8 +1,20 @@
-* text=auto
+* -text
 
-*.pbxproj           text eol=lf
+*.cs        text eol=lf diff=csharp
+*.shader    text eol=lf
+*.cginc     text eol=lf
+*.hlsl      text eol=lf
+*.compute   text eol=lf
 
-*.props             text eol=crlf
+*.meta      text eol=lf
+
+*.h         text eol=lf
+*.cpp       text eol=lf
+*.cc        text eol=lf
+*.c         text eol=lf
+
+*.plist     text eol=lf
+
 *.sln               text eol=crlf
 *.vcxproj           text eol=crlf
 *.vcxproj.filters   text eol=crlf

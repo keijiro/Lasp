@@ -5,9 +5,15 @@ using UnityEngine;
 
 namespace Lasp
 {
-    // High-level audio input interface that provides the basic functionality
-    // of LASP. 
-    public static class AudioInput
+    // Type enums for the LASP filter bank
+    public enum FilterType { Bypass, LowPass, BandPass, HighPass }
+
+    // UnityEvent used to drive components with audio level
+    [System.Serializable]
+    public class AudioLevelEvent : UnityEngine.Events.UnityEvent<float> {}
+
+    // High-level interface providing the basic functionality of LASP
+    public static class MasterInput
     {
         #region Public methods
 

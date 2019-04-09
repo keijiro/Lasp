@@ -404,7 +404,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = /Assets/Lasp/Internal/macOS;
+				INSTALL_PATH = /Assets/Lasp/Plugin/MacOS;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.keijiro.Lasp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = bundle;
@@ -416,7 +416,7 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = /Assets/Lasp/Internal/macOS;
+				INSTALL_PATH = /Assets/Lasp/Plugin/MacOS;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.keijiro.Lasp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = bundle;

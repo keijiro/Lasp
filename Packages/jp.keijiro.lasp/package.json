@@ -1,8 +1,0 @@
-{
-    "name": "jp.keijiro.lasp",
-    "displayName": "LASP",
-    "version": "0.1.0",
-    "unity": "2018.1",
-    "description": "Low-latency audio signal processing plugin",
-    "dependencies": { }
-}

@@ -114,8 +114,7 @@ of peak level.
 buffer to a given float array. The length of the array must be shorter than the
 internal buffer. It's safe to use 1024 or less.
 
-[`MasterInput`]: Assets/Lasp/Runtime/MasterInput.cs#L16
-[`FilterType`]: Assets/Lasp/Runtime/MasterInput.cs#L9
+[`MasterInput`]: Assets/Lasp/Runtime/LaspCommon.cs#L16
 
 Tips
 ----

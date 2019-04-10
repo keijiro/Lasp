@@ -20,11 +20,12 @@ namespace Lasp
             set { _filterType = value; }
         }
 
-        [SerializeField] bool _autoGain = true;
+        [UnityEngine.Serialization.FormerlySerializedAs("_autoGain")]
+        [SerializeField] bool _peakTracking = true;
 
-        public bool autoGain {
-            get { return _autoGain; }
-            set { _autoGain = value; }
+        public bool peakTracking {
+            get { return _peakTracking; }
+            set { _peakTracking = value; }
         }
 
         [SerializeField, Range(-10, 40)] float _gain = 6;
@@ -69,7 +70,7 @@ namespace Lasp
         #region Runtime public properties and methods
 
         public float calculatedGain {
-            get { return _autoGain ? -_peak : _gain; }
+            get { return _peakTracking ? -_peak : _gain; }
         }
 
         public float inputAmplitude {
@@ -80,7 +81,7 @@ namespace Lasp
             get { return _amplitude; }
         }
 
-        public void ResetAutoGain()
+        public void ResetPeak()
         {
             _peak = kSilence;
         }
@@ -109,7 +110,7 @@ namespace Lasp
             var dt = Time.deltaTime;
 
             // Automatic gain control
-            if (_autoGain)
+            if (_peakTracking)
             {
                 // Gradually falls down to the minimum amplitude.
                 const float peakFallSpeed = 0.6f;

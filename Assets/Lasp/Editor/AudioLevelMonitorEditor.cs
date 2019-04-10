@@ -12,13 +12,12 @@ namespace Lasp
     {
         SerializedProperty _filterType;
         SerializedProperty _dynamicRange;
-        SerializedProperty _autoGain;
+        SerializedProperty _peakTracking;
         SerializedProperty _gain;
         SerializedProperty _holdAndFallDown;
         SerializedProperty _fallDownSpeed;
         SerializedProperty _normalizedLevelEvent;
 
-        static GUIContent _labelAutoGain = new GUIContent("Auto Gain Control");
         static GUIContent _labelDynamicRange = new GUIContent("Dynamic Range");
         static GUIContent _labelDynamicRangeWide = new GUIContent("Dynamic Range (dB)");
         static GUIContent _labelGain = new GUIContent("Gain (dB)");
@@ -28,7 +27,7 @@ namespace Lasp
         {
             _filterType = serializedObject.FindProperty("_filterType");
             _dynamicRange = serializedObject.FindProperty("_dynamicRange");
-            _autoGain = serializedObject.FindProperty("_autoGain");
+            _peakTracking = serializedObject.FindProperty("_peakTracking");
             _gain = serializedObject.FindProperty("_gain");
             _holdAndFallDown = serializedObject.FindProperty("_holdAndFallDown");
             _fallDownSpeed = serializedObject.FindProperty("_fallDownSpeed");
@@ -49,9 +48,9 @@ namespace Lasp
 
             EditorGUILayout.PropertyField(_filterType);
             EditorGUILayout.PropertyField(_dynamicRange, wide ? _labelDynamicRangeWide : _labelDynamicRange);
-            EditorGUILayout.PropertyField(_autoGain, _labelAutoGain);
+            EditorGUILayout.PropertyField(_peakTracking);
 
-            if (_autoGain.hasMultipleDifferentValues || !_autoGain.boolValue)
+            if (_peakTracking.hasMultipleDifferentValues || !_peakTracking.boolValue)
             {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(_gain, _labelGain);
@@ -77,7 +76,7 @@ namespace Lasp
             {
                 EditorGUILayout.Space();
                 if (GUILayout.Button("Reset Auto Gain"))
-                    foreach (AudioLevelTracker t in targets) t.ResetAutoGain();
+                    foreach (AudioLevelTracker t in targets) t.ResetPeak();
             }
 
             EditorGUILayout.Space();

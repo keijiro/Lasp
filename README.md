@@ -47,10 +47,10 @@ the following line to the `dependencies` section in the package manifest file
 [Git support on Package Manager]:
     https://forum.unity.com/threads/git-support-on-package-manager.573673/
 
-Audio Input Tracker Component
+Audio Level Tracker Component
 -----------------------------
 
-The **Audio Input Tracker** component is used to receive audio input and
+The **Audio Level Tracker** component is used to receive audio input and
 control other components by normalized audio level.
 
 ![GIF](https://i.imgur.com/ddCZSs5.gif)

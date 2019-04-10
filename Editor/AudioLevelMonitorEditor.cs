@@ -7,18 +7,17 @@ using UnityEditor;
 namespace Lasp
 {
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(LevelMonitor))]
-    public class LevelMonitorEditor : Editor
+    [CustomEditor(typeof(AudioLevelTracker))]
+    sealed class AudioLevelTrackerEditor : Editor
     {
         SerializedProperty _filterType;
         SerializedProperty _dynamicRange;
-        SerializedProperty _autoGain;
+        SerializedProperty _peakTracking;
         SerializedProperty _gain;
         SerializedProperty _holdAndFallDown;
         SerializedProperty _fallDownSpeed;
-        SerializedProperty _outputEvent;
+        SerializedProperty _normalizedLevelEvent;
 
-        static GUIContent _labelAutoGain = new GUIContent("Auto Gain Control");
         static GUIContent _labelDynamicRange = new GUIContent("Dynamic Range");
         static GUIContent _labelDynamicRangeWide = new GUIContent("Dynamic Range (dB)");
         static GUIContent _labelGain = new GUIContent("Gain (dB)");
@@ -28,11 +27,11 @@ namespace Lasp
         {
             _filterType = serializedObject.FindProperty("_filterType");
             _dynamicRange = serializedObject.FindProperty("_dynamicRange");
-            _autoGain = serializedObject.FindProperty("_autoGain");
+            _peakTracking = serializedObject.FindProperty("_peakTracking");
             _gain = serializedObject.FindProperty("_gain");
             _holdAndFallDown = serializedObject.FindProperty("_holdAndFallDown");
             _fallDownSpeed = serializedObject.FindProperty("_fallDownSpeed");
-            _outputEvent = serializedObject.FindProperty("_outputEvent");
+            _normalizedLevelEvent = serializedObject.FindProperty("_normalizedLevelEvent");
         }
 
         public override bool RequiresConstantRepaint()
@@ -49,9 +48,9 @@ namespace Lasp
 
             EditorGUILayout.PropertyField(_filterType);
             EditorGUILayout.PropertyField(_dynamicRange, wide ? _labelDynamicRangeWide : _labelDynamicRange);
-            EditorGUILayout.PropertyField(_autoGain, _labelAutoGain);
+            EditorGUILayout.PropertyField(_peakTracking);
 
-            if (_autoGain.hasMultipleDifferentValues || !_autoGain.boolValue)
+            if (_peakTracking.hasMultipleDifferentValues || !_peakTracking.boolValue)
             {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(_gain, _labelGain);
@@ -70,32 +69,32 @@ namespace Lasp
             if (RequiresConstantRepaint())
             {
                 EditorGUILayout.Space();
-                DrawMeter((LevelMonitor)target);
+                DrawMeter((AudioLevelTracker)target);
             }
 
             if (Application.isPlaying)
             {
                 EditorGUILayout.Space();
                 if (GUILayout.Button("Reset Auto Gain"))
-                    foreach (LevelMonitor lm in targets) lm.ResetAutoGain();
+                    foreach (AudioLevelTracker t in targets) t.ResetPeak();
             }
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.PropertyField(_outputEvent);
+            EditorGUILayout.PropertyField(_normalizedLevelEvent);
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        // Draw a VU meter with a given LevelMonitor instance.
-        void DrawMeter(LevelMonitor monitor)
+        // Draw a VU meter with a given AudioLevelTracker instance.
+        void DrawMeter(AudioLevelTracker tracker)
         {
             var rect = GUILayoutUtility.GetRect(128, 9);
 
             const float kMeterRange = 60;
-            var amp  = 1 + monitor.inputAmplitude / kMeterRange;
-            var peak = 1 - monitor.calculatedGain / kMeterRange;
-            var dr = monitor.dynamicRange / kMeterRange;
+            var amp  = 1 + tracker.inputAmplitude / kMeterRange;
+            var peak = 1 - tracker.calculatedGain / kMeterRange;
+            var dr = tracker.dynamicRange / kMeterRange;
 
             // Background
             DrawRect(0, 0, 1, 1, rect, new Color(0.1f, 0.1f, 0.1f, 1));
@@ -111,7 +110,7 @@ namespace Lasp
             DrawRect(x2, 0, amp, 1, rect, Color.red);  // over the range
 
             // Output level bar
-            var x3 = peak + dr * (monitor.outputAmplitude - 1);
+            var x3 = peak + dr * (tracker.normalizedLevel - 1);
             DrawRect(x3 - 3 / rect.width, 0, x3, 1, rect, Color.green);
 
             // Label: -60dB

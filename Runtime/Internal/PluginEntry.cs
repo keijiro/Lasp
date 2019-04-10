@@ -1,15 +1,19 @@
-﻿// LASP - Low-latency Audio Signal Processing plugin for Unity
+// LASP - Low-latency Audio Signal Processing plugin for Unity
 // https://github.com/keijiro/Lasp
+
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX
+#define LASP_ENABLED
+#endif
 
 using System;
 using System.Runtime.InteropServices;
 
 namespace Lasp
 {
-    public enum FilterType { Bypass, LowPass, BandPass, HighPass }
-
-    public static class PluginEntry
+    internal static class PluginEntry
     {
+        #if LASP_ENABLED
+
         #region Plugin interface
 
         [DllImport("Lasp", EntryPoint="LaspCreateDriver")]
@@ -63,5 +67,19 @@ namespace Lasp
         }
 
         #endregion
+
+        #else
+
+        public static IntPtr CreateDriver() { return IntPtr.Zero; }
+        public static void DeleteDriver(IntPtr driver) {}
+        public static bool OpenStream(IntPtr driver) { return false; }
+        public static void CloseStream(IntPtr driver) {}
+        public static float GetSampleRate(IntPtr driver) { return 0; }
+        public static float GetPeakLevel(IntPtr driver, FilterType filter, float duration) { return 0; }
+        public static float CalculateRMS(IntPtr driver, FilterType filter, float duration) { return 0; }
+        public static int RetrieveWaveform(IntPtr driver, FilterType filter, float[] dest, int length) { return 0; }
+        public static void SetupLogger() {}
+
+        #endif
     }
 }

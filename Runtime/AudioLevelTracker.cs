@@ -2,20 +2,16 @@
 // https://github.com/keijiro/Lasp
 
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Lasp
 {
-    [AddComponentMenu("LASP/Level Monitor")]
-    public class LevelMonitor : MonoBehaviour
+    // Unity component used to track audio input level and drive other
+    // components via UnityEvent
+    [AddComponentMenu("LASP/Audio Level Tracker")]
+    public sealed class AudioLevelTracker : MonoBehaviour
     {
-        #region Nest type definition
-
-        [System.Serializable] class FloatEvent : UnityEvent<float> {}
-
-        #endregion
-
-        #region Editable properties
+        #region Editable attributes
 
         [SerializeField] Lasp.FilterType _filterType = Lasp.FilterType.LowPass;
 
@@ -24,11 +20,12 @@ namespace Lasp
             set { _filterType = value; }
         }
 
-        [SerializeField] bool _autoGain = true;
+        [UnityEngine.Serialization.FormerlySerializedAs("_autoGain")]
+        [SerializeField] bool _peakTracking = true;
 
-        public bool autoGain {
-            get { return _autoGain; }
-            set { _autoGain = value; }
+        public bool peakTracking {
+            get { return _peakTracking; }
+            set { _peakTracking = value; }
         }
 
         [SerializeField, Range(-10, 40)] float _gain = 6;
@@ -59,27 +56,32 @@ namespace Lasp
             set { _fallDownSpeed = value; }
         }
 
-        [SerializeField] FloatEvent _outputEvent = new FloatEvent();
+        [SerializeField]
+        [UnityEngine.Serialization.FormerlySerializedAs("_outputEvent")]
+        AudioLevelEvent _normalizedLevelEvent = new AudioLevelEvent();
 
-        // No property for outputEvent
+        public AudioLevelEvent normalizedLevelEvent {
+            get { return _normalizedLevelEvent; }
+            set { _normalizedLevelEvent = value; }
+        }
 
         #endregion
 
         #region Runtime public properties and methods
 
         public float calculatedGain {
-            get { return _autoGain ? -_peak : _gain; }
+            get { return _peakTracking ? -_peak : _gain; }
         }
 
         public float inputAmplitude {
             get { return Lasp.MasterInput.CalculateRMSDecibel(_filterType); }
         }
 
-        public float outputAmplitude {
+        public float normalizedLevel {
             get { return _amplitude; }
         }
 
-        public void ResetAutoGain()
+        public void ResetPeak()
         {
             _peak = kSilence;
         }
@@ -100,7 +102,7 @@ namespace Lasp
 
         #endregion
 
-        #region MonoBehaviour functions
+        #region MonoBehaviour implementation
 
         void Update()
         {
@@ -108,7 +110,7 @@ namespace Lasp
             var dt = Time.deltaTime;
 
             // Automatic gain control
-            if (_autoGain)
+            if (_peakTracking)
             {
                 // Gradually falls down to the minimum amplitude.
                 const float peakFallSpeed = 0.6f;
@@ -141,7 +143,7 @@ namespace Lasp
             }
 
             // Output
-            _outputEvent.Invoke(_amplitude);
+            _normalizedLevelEvent.Invoke(_amplitude);
         }
 
         #endregion

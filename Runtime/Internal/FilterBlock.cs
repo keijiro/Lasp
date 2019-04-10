@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace Lasp
 {
-    // FilterBlock class that is used to cache results from a specific filter
-    // block (single band in a filter bank).
+    // Internal utility used to cache data retrieved from a specific filter
+    // block (single band in a filter bank)
     internal sealed class FilterBlock
     {
         FilterType _filter;

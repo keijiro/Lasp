@@ -75,7 +75,7 @@ namespace Lasp
             if (Application.isPlaying)
             {
                 EditorGUILayout.Space();
-                if (GUILayout.Button("Reset Auto Gain"))
+                if (GUILayout.Button("Reset Peak Level"))
                     foreach (AudioLevelTracker t in targets) t.ResetPeak();
             }
 

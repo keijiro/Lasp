@@ -1,8 +1,10 @@
 {
-    "name": "jp.keijiro.lasp",
-    "displayName": "LASP",
-    "version": "1.0.1",
-    "unity": "2018.1",
+    "author": "Keijiro Takahashi",
+    "dependencies": { },
     "description": "Low-latency audio signal processing plugin",
-    "dependencies": { }
+    "displayName": "LASP",
+    "name": "jp.keijiro.lasp",
+    "unity": "2019.1",
+    "unityRelease": "0f2",
+    "version": "1.0.2"
 }

@@ -657,9 +657,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 546d72d8bfecdba4c9798050f57e677c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _amplitude: 11
+  _amplitude: 3.3
   _nFft: 11
   _holdAndFallDown: 1
+  _fallDownSpeed: 0.333
 --- !u!1 &1750779928
 GameObject:
   m_ObjectHideFlags: 0

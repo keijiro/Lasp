@@ -77,4 +77,13 @@ extern "C"
         buffer.copyRecentFrames(dest, length);
         return std::min(length, static_cast<int32_t>(buffer.getSize()));
     }
+
+    bool UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API LaspRetrieveFft(void* driver, float* dest, int32_t length)
+    {
+        auto pd = reinterpret_cast<Lasp::Driver*>(driver);
+        pd->setAvgFftBufferSize( length );
+        auto& buffer = pd->getFftBuffer();
+        buffer.copyRecentFrames(dest, length);
+        return std::min(length, static_cast<int32_t>(buffer.getSize()));
+    }
 }

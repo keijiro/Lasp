@@ -63,6 +63,11 @@ namespace Lasp
         public int RetrieveWaveform(FilterType filter, float[] dest, int length)
         {
             return PluginEntry.RetrieveWaveform(_driver, filter, dest, length);
+        }  
+
+        public int RetrieveFft(float[] dest, int length)
+        {
+            return PluginEntry.RetrieveFft(_driver, dest, length);
         }
 
         System.IntPtr _driver;

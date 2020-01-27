@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -80,6 +80,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\KissFft\kissfft.hh" />
+    <ClInclude Include="..\KissFft\kiss_fft.h" />
+    <ClInclude Include="..\KissFft\_kiss_fft_guts.h" />
     <ClInclude Include="..\PortAudio\include\pa_win_wasapi.h" />
     <ClInclude Include="..\PortAudio\include\portaudio.h" />
     <ClInclude Include="..\Source\BiquadFilter.h" />
@@ -89,6 +92,7 @@
     <ClInclude Include="..\Source\RingBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\KissFft\kiss_fft.c" />
     <ClCompile Include="..\PortAudio\common\pa_allocation.c" />
     <ClCompile Include="..\PortAudio\common\pa_converters.c" />
     <ClCompile Include="..\PortAudio\common\pa_cpuload.c" />

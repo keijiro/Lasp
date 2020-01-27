@@ -52,6 +52,12 @@ namespace Lasp
             _stream.RetrieveWaveform(filter, dest, dest.Length);
         }
 
+        public static void RetrieveFft(float[] dest, int length)
+        {
+            UpdateState();
+            _stream.RetrieveFft(dest, length);
+        }
+
         #endregion
 
         #region Internal methods

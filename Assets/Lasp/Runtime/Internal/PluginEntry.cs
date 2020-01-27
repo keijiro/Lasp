@@ -40,6 +40,9 @@ namespace Lasp
         [DllImport("Lasp", EntryPoint="LaspRetrieveWaveform")]
         public static extern int RetrieveWaveform(IntPtr driver, FilterType filter, float[] dest, int length);
 
+        [DllImport("Lasp", EntryPoint="LaspRetrieveFft")]
+        public static extern int RetrieveFft(IntPtr driver, float[] dest, int length);
+
         #endregion
 
         #region Debug helpers
@@ -79,6 +82,7 @@ namespace Lasp
         public static float CalculateRMS(IntPtr driver, FilterType filter, float duration) { return 0; }
         public static int RetrieveWaveform(IntPtr driver, FilterType filter, float[] dest, int length) { return 0; }
         public static void SetupLogger() {}
+        public static int RetrieveFft(IntPtr driver, float[] dest, int length) { return 0; }
 
         #endif
     }

@@ -31,6 +31,9 @@
     <Filter Include="PortAudio\include">
       <UniqueIdentifier>{911ddd1e-f073-49b7-ad36-818765841e85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KissFft">
+      <UniqueIdentifier>{700e883f-71d8-4a35-859d-7c2e8e635a44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\PortAudio\include\pa_win_wasapi.h">
@@ -54,12 +57,18 @@
     <ClInclude Include="..\Source\Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\KissFft\_kiss_fft_guts.h">
+      <Filter>KissFft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\KissFft\kiss_fft.h">
+      <Filter>KissFft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\KissFft\kissfft.hh">
+      <Filter>KissFft</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Lasp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\PortAudio\common\pa_allocation.c">
@@ -103,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="..\PortAudio\os\win\pa_win_util.c">
       <Filter>PortAudio\os\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\KissFft\kiss_fft.c">
+      <Filter>KissFft</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

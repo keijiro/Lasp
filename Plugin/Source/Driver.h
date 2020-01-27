@@ -3,10 +3,13 @@
 // The LASP driver that handles PortAudio objects,
 // internal filter bank and ring buffers.
 
+#define _USE_MATH_DEFINES
+#include "cmath"
 #include "portaudio.h"
 #include "Debug.h"
 #include "RingBuffer.h"
 #include "BiquadFilter.h"
+#include "../KissFft/kiss_fft.h"
 
 namespace Lasp
 {
@@ -97,6 +100,10 @@ namespace Lasp
             else
                 LASP_LOG("Stream started.");
 
+            // Initialize FFT variables
+            for (int i = 0; i < nFft; i++)
+                hannRes_[i] = (1 - cos(2 * M_PI * i / nFft)) * 0.5;
+        	
             return true;
         }
 
@@ -124,11 +131,21 @@ namespace Lasp
             return sampleRate_;
         }
 
+    	void setAvgFftBufferSize(const int length)
+        {
+            nAvgFft = length;
+        }
+
         const Lasp::RingBuffer& getBuffer(int index) const
         {
             return buffers_[index];
         }
 
+        const Lasp::RingBuffer& getFftBuffer() const
+        {
+            return fftBuffer_;
+        }
+    	
     private:
 
         PaStream* stream_;
@@ -143,6 +160,15 @@ namespace Lasp
         // The buffers are assigned in this order: [non-filtered, low, middle, high]
         std::array<RingBuffer, 4> buffers_;
 
+    	// Buffer used to store FFT results
+        RingBuffer fftBuffer_;
+        static int const nFft = 128;
+        int nAvgFft = nFft;
+        kiss_fft_cfg config_;
+        kiss_fft_cpx inbuf_[nFft] = { 0 };
+        kiss_fft_cpx outbuf_[nFft] = { 0 };
+        float hannRes_[nFft] = { 0.0 };
+    	
         PaError TryOpenStream(float sampleRate)
         {
             auto deviceInfo = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice());
@@ -155,7 +181,7 @@ namespace Lasp
             params.sampleFormat = paFloat32;
             params.suggestedLatency = deviceInfo->defaultLowInputLatency;
 
-            auto err = Pa_OpenStream(
+        	auto err = Pa_OpenStream(
                 &stream_,
                 &params,
                 nullptr,
@@ -204,7 +230,54 @@ namespace Lasp
                 buffer_hpf.pushFrame(hpf2.feedSample(hpf1.feedSample(input)));
             }
 
+        	// Perform FFT
+            auto nFft = driver->nFft;
+            auto nAvgFft = driver->nAvgFft;
+            auto& fftBuffer = driver->fftBuffer_;
+            auto& hannRes = driver->hannRes_;
+            auto& config = driver->config_;
+        	auto& in = driver->inbuf_;
+            auto& out = driver->outbuf_;
+
+            for (auto i = 0; i < nFft; i++) {
+                in[i].r = inputBuffer[i] * hannRes[i];
+                in[i].i = 0;
+            }
+        	
+            config = kiss_fft_alloc(nFft, 0, NULL, NULL);
+            kiss_fft(config, in, out);
+            const auto fft = new float[nFft];
+            for (auto j = 0; j < nFft / 2; j++)
+            {
+                fft[j] = sqrt(out[j].r * out[j].r + out[j].i * out[j].i);
+            }
+        	
+            const auto avgFft = new float[nAvgFft];
+            const auto avgWidth = int(nFft / 2 / nAvgFft);
+            for (auto i = 0; i < nAvgFft; i++)
+            {
+	            float avg = 0;
+	            int j;
+	            for (j = 0; j < avgWidth; j++)
+	            {
+		            const auto offset = j + i * avgWidth;
+		            if (offset < nFft)
+			            avg += fft[offset];
+		            else
+			            break;
+	            }
+	            avg /= float(j + 1);
+                avgFft[i] = avg;
+            }
+
+            for (auto j = 0; j < nAvgFft; j++)
+	            fftBuffer.pushFrame(avgFft[j]);
+
+            kiss_fft_free(config);
+            delete[] fft;
+            delete[] avgFft;
             return 0;
         }
+    	
     };
 }

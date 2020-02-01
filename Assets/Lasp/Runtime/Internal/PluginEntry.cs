@@ -41,7 +41,7 @@ namespace Lasp
         public static extern int RetrieveWaveform(IntPtr driver, FilterType filter, float[] dest, int length);
 
         [DllImport("Lasp", EntryPoint="LaspRetrieveFft")]
-        public static extern int RetrieveFft(IntPtr driver, float[] dest, int length);
+        public static extern int RetrieveFft(IntPtr driver, FftAveragingType type, float[] dest, int length);
 
         #endregion
 

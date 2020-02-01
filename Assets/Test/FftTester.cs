@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class FftTester : MonoBehaviour
 {
+    [SerializeField] Lasp.FftAveragingType _averagingType = Lasp.FftAveragingType.Linear;
     [SerializeField] [Range(0, 32)] float _inputGain = 1.0f;
     [SerializeField] [Range(1, 64)] int _fftBands = 11;
     [SerializeField] bool _holdAndFallDown = true;
@@ -29,7 +30,7 @@ public class FftTester : MonoBehaviour
 
     void Update()
     {
-        Lasp.MasterInput.RetrieveFft(_fftIn, _fftBands);
+        Lasp.MasterInput.RetrieveFft(_averagingType, _fftIn, _fftBands);
         UpdateFftCubes();
     }
 

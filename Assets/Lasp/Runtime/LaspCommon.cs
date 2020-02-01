@@ -7,6 +7,8 @@ namespace Lasp
 {
     // Type enums for the LASP filter bank
     public enum FilterType { Bypass, LowPass, BandPass, HighPass }
+    
+    public enum FftAveragingType { Linear, Logarithmic }
 
     // UnityEvent used to drive components with audio level
     [System.Serializable]
@@ -53,10 +55,10 @@ namespace Lasp
         }
         
         // Retrieve and copy array of FFT values
-        public static void RetrieveFft(float[] dest, int length)
+        public static void RetrieveFft(FftAveragingType type, float[] dest, int length)
         {
             UpdateState();
-            _stream.RetrieveFft(dest, length);
+            _stream.RetrieveFft(type, dest, length);
         }
 
         #endregion

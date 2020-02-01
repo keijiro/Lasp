@@ -100,7 +100,7 @@ namespace Lasp
             else
                 LASP_LOG("Stream started.");
 
-            // Initialize FFT variables
+            // Initialize hann windowing array for FFT
             for (auto i = 0; i < nFft; i++)
                 hann_[i] = (1 - cos(2 * M_PI * i / nFft)) * 0.5;
         	
@@ -131,19 +131,26 @@ namespace Lasp
             return sampleRate_;
         }
 
-    	void setAvgFftBufferSize(const int length)
-        {
-            nAvgFft = length;
-        }
-
         const Lasp::RingBuffer& getBuffer(int index) const
         {
             return buffers_[index];
         }
 
-        const Lasp::RingBuffer& getFftBuffer() const
+        void setAvgFftBuffer(int avgType, float* dest, int length) const
         {
-            return fftBuffer_;
+	        switch (avgType)
+	        {
+	        case 0:
+		        setLinAvgFft(dest, length);
+		        break;
+
+	        case 1:
+		        setLinAvgFft(dest, length);
+		        break;
+            default:
+                setLinAvgFft(dest, length);
+                break;
+	        }
         }
     	
     private:
@@ -160,10 +167,11 @@ namespace Lasp
         // The buffers are assigned in this order: [non-filtered, low, middle, high]
         std::array<RingBuffer, 4> buffers_;
 
-    	// Buffer used to store FFT results
+    	// Buffer to store FFT results
         RingBuffer fftBuffer_;
+    	// Number of FFT bands
         static int const nFft = 128;
-        int nAvgFft = nFft;
+    	// Kiss FFT variables
         kiss_fft_cfg config_;
         kiss_fft_cpx inbuf_[nFft] = { 0 };
         kiss_fft_cpx outbuf_[nFft] = { 0 };
@@ -231,57 +239,58 @@ namespace Lasp
                 buffer_hpf.pushFrame(hpf2.feedSample(hpf1.feedSample(input)));
             }
 
-        	// Perform FFT calculations
+        	// FFT
             auto nFft = driver->nFft;
-            auto nAvgFft = driver->nAvgFft;
             auto& fftBuffer = driver->fftBuffer_;
             auto& hannRes = driver->hann_;
             auto& config = driver->config_;
         	auto& in = driver->inbuf_;
             auto& out = driver->outbuf_;
 
+        	// Setup complex number array for FFT input
             for (auto i = 0; i < nFft; i++) {
                 in[i].r = inputBuffer[i] * hannRes[i];
                 in[i].i = 0;
             }
-        	
+
+        	// Perform FFT calculations
             config = kiss_fft_alloc(nFft, 0, NULL, NULL);
             kiss_fft(config, in, out);
-            const auto fft = new float[nFft];
             for (auto j = 0; j < nFft / 2; j++)
             {
             	// Skipping out[0], which is the DC bin (0Hz)
 	            const auto offset = j + 1;
-                fft[j] = sqrt(out[offset].r * out[offset].r + out[offset].i * out[offset].i);
+                fftBuffer.pushFrame(sqrt(out[offset].r * out[offset].r + out[offset].i * out[offset].i));
             }
-
-        	// Linear averaging to reduce the number of FFT bands
-            const auto avgFft = new float[nAvgFft];
-            const auto avgWidth = int(nFft / 2 / nAvgFft);
-            for (auto i = 0; i < nAvgFft; i++)
-            {
-	            float avg = 0;
-	            int j;
-	            for (j = 0; j < avgWidth; j++)
-	            {
-		            const auto offset = j + i * avgWidth;
-		            if (offset < nFft)
-			            avg += fft[offset];
-		            else
-			            break;
-	            }
-	            avg /= float(j + 1);
-                avgFft[i] = avg;
-            }
-
-            for (auto j = 0; j < nAvgFft; j++)
-	            fftBuffer.pushFrame(avgFft[j]);
 
             kiss_fft_free(config);
-            delete[] fft;
-            delete[] avgFft;
             return 0;
         }
-    	
+
+        void setLinAvgFft(float* dest, int length) const
+        {
+            // Linear averaging to reduce the number of FFT bands
+            const auto fft = new float[fftBuffer_.getSize()];
+            const auto avgWidth = int(nFft / 2 / length);
+            fftBuffer_.copyRecentFrames(fft, fftBuffer_.getSize());
+
+            for (auto i = 0; i < length; i++)
+            {
+                float avg = 0;
+                int j;
+                for (j = 0; j < avgWidth; j++)
+                {
+                    const auto offset = j + i * avgWidth;
+                    if (offset < nFft)
+                        avg += fft[offset];
+                    else
+                        break;
+                }
+                avg /= float(j + 1);
+                dest[i] = avg;
+            }
+
+            delete[] fft;
+        }
     };
 }

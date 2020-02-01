@@ -101,8 +101,8 @@ namespace Lasp
                 LASP_LOG("Stream started.");
 
             // Initialize FFT variables
-            for (int i = 0; i < nFft; i++)
-                hannRes_[i] = (1 - cos(2 * M_PI * i / nFft)) * 0.5;
+            for (auto i = 0; i < nFft; i++)
+                hann_[i] = (1 - cos(2 * M_PI * i / nFft)) * 0.5;
         	
             return true;
         }
@@ -167,7 +167,8 @@ namespace Lasp
         kiss_fft_cfg config_;
         kiss_fft_cpx inbuf_[nFft] = { 0 };
         kiss_fft_cpx outbuf_[nFft] = { 0 };
-        float hannRes_[nFft] = { 0.0 };
+    	// Array for hann windowing
+        float hann_[nFft] = { 0.0 };
     	
         PaError TryOpenStream(float sampleRate)
         {
@@ -230,11 +231,11 @@ namespace Lasp
                 buffer_hpf.pushFrame(hpf2.feedSample(hpf1.feedSample(input)));
             }
 
-        	// Perform FFT
+        	// Perform FFT calculations
             auto nFft = driver->nFft;
             auto nAvgFft = driver->nAvgFft;
             auto& fftBuffer = driver->fftBuffer_;
-            auto& hannRes = driver->hannRes_;
+            auto& hannRes = driver->hann_;
             auto& config = driver->config_;
         	auto& in = driver->inbuf_;
             auto& out = driver->outbuf_;
@@ -249,9 +250,12 @@ namespace Lasp
             const auto fft = new float[nFft];
             for (auto j = 0; j < nFft / 2; j++)
             {
-                fft[j] = sqrt(out[j].r * out[j].r + out[j].i * out[j].i);
+            	// Skipping out[0], which is the DC bin (0Hz)
+	            const auto offset = j + 1;
+                fft[j] = sqrt(out[offset].r * out[offset].r + out[offset].i * out[offset].i);
             }
-        	
+
+        	// Linear averaging to reduce the number of FFT bands
             const auto avgFft = new float[nAvgFft];
             const auto avgWidth = int(nFft / 2 / nAvgFft);
             for (auto i = 0; i < nAvgFft; i++)

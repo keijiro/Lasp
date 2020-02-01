@@ -51,7 +51,8 @@ namespace Lasp
             UpdateState();
             _stream.RetrieveWaveform(filter, dest, dest.Length);
         }
-
+        
+        // Retrieve and copy array of FFT values
         public static void RetrieveFft(float[] dest, int length)
         {
             UpdateState();

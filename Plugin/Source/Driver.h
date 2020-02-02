@@ -143,11 +143,8 @@ namespace Lasp
 	        case 0:
 		        setLinAvgFft(dest, length);
 		        break;
-	        case 1:
-		        setLogAvgFft(dest, length);
-		        break;
 	        default:
-		        setLinAvgFft(dest, length);
+                setLogAvgFft(dest, length);
 		        break;
 	        }
         }
@@ -166,7 +163,7 @@ namespace Lasp
         // The buffers are assigned in this order: [non-filtered, low, middle, high]
         std::array<RingBuffer, 4> buffers_;
 
-    	// Number of FFT bands
+    	// Number of FFT bands for baseline calculation
         static int const nFft_ = 128;
 
         // Used to configure FFT calculations

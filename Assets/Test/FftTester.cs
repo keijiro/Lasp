@@ -5,11 +5,11 @@ using Lasp;
 
 public class FftTester : MonoBehaviour
 {
-    [SerializeField] FftAveragingType _averagingType = Lasp.FftAveragingType.Linear;
+    [SerializeField] FftAveragingType _averagingType = Lasp.FftAveragingType.Logarithmic;
     [SerializeField] [Range(0, 32)] float _inputGain = 1.0f;
     [SerializeField] [Range(1, 64)] int _fftBands = 11;
     [SerializeField] bool _holdAndFallDown = true;
-    [SerializeField, Range(0, 1)] float _fallDownSpeed = 0.3f;
+    [SerializeField, Range(0, 1)] float _fallDownSpeed = 0.1f;
 
     private int _bands;
     private float _fall = 0;

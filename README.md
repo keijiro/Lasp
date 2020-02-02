@@ -18,8 +18,10 @@ Features
   accents.
 - Dynamic normalization based on the most recent peak level.
 - Multi platform support via [PortAudio].
+- Free Fourier Transform via [KissFft]
 
 [PortAudio]: http://www.portaudio.com
+[KissFft]: https://github.com/mborgerding/kissfft
 
 System Requirements
 -------------------
@@ -85,6 +87,33 @@ This adds a "peak-hold and fall down" behavior to the output value that is
 commonly used in VU meters. This is useful to make choppy animation smooth.
 
 ![GIF](https://i.imgur.com/MEojdmD.gif)
+
+Free Fourier Transform
+-----------------------------
+
+This provides basic FFT functionality for more granular audio analysis. It provides 
+users access to a float array that represents the amplitudes for specific frequency 
+bands averaged accross the frequency spectrum.
+
+![GIF](https://i.imgur.com/POEMdCR.gif)
+
+### Averaging Type
+
+This is the algorithm used for averaging the FFT frequency bands. 'Linear' averages 
+across the frequency spectrum evenly, while 'Logarithmic' averages logarithmically, 
+which more accurately corresponds to how humans perceive sound.
+
+### Input Gain
+
+This sets the input gain of the audio signal to compensate for audio levels.
+
+### Fft Bands
+
+This is the number of bands in the array returned by the plugin.
+
+### Hold And Fall / Fall Down Speed
+
+This is the same as in the above 'Audio Level Tracker Component'.
 
 Scripting Interface
 -------------------

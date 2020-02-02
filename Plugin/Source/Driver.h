@@ -101,8 +101,8 @@ namespace Lasp
                 LASP_LOG("Stream started.");
 
             // Initialize hann windowing array for FFT
-            for (auto i = 0; i < nFft; i++)
-                hann_[i] = (1 - cos(2 * M_PI * i / nFft)) * 0.5;
+            for (auto i = 0; i < nFft_; i++)
+                hann_[i] = (1 - cos(2 * M_PI * i / nFft_)) * 0.5;
         	
             return true;
         }
@@ -143,13 +143,12 @@ namespace Lasp
 	        case 0:
 		        setLinAvgFft(dest, length);
 		        break;
-
 	        case 1:
+		        setLogAvgFft(dest, length);
+		        break;
+	        default:
 		        setLinAvgFft(dest, length);
 		        break;
-            default:
-                setLinAvgFft(dest, length);
-                break;
 	        }
         }
     	
@@ -167,16 +166,17 @@ namespace Lasp
         // The buffers are assigned in this order: [non-filtered, low, middle, high]
         std::array<RingBuffer, 4> buffers_;
 
-    	// Buffer to store FFT results
-        RingBuffer fftBuffer_;
     	// Number of FFT bands
-        static int const nFft = 128;
-    	// Kiss FFT variables
+        static int const nFft_ = 128;
+
+        // Used to configure FFT calculations
         kiss_fft_cfg config_;
-        kiss_fft_cpx inbuf_[nFft] = { 0 };
-        kiss_fft_cpx outbuf_[nFft] = { 0 };
+    	
+        // Buffer to store FFT results
+        float fftBuffer_[nFft_] = { 0 };
+    	
     	// Array for hann windowing
-        float hann_[nFft] = { 0.0 };
+        float hann_[nFft_] = { 0.0 };
     	
         PaError TryOpenStream(float sampleRate)
         {
@@ -240,40 +240,36 @@ namespace Lasp
             }
 
         	// FFT
-            auto nFft = driver->nFft;
             auto& fftBuffer = driver->fftBuffer_;
             auto& hannRes = driver->hann_;
             auto& config = driver->config_;
-        	auto& in = driver->inbuf_;
-            auto& out = driver->outbuf_;
+            kiss_fft_cpx in[nFft_] = { 0 };
+            kiss_fft_cpx out[nFft_] = { 0 };
 
         	// Setup complex number array for FFT input
-            for (auto i = 0; i < nFft; i++) {
+            for (auto i = 0; i < nFft_; i++) {
                 in[i].r = inputBuffer[i] * hannRes[i];
                 in[i].i = 0;
             }
 
         	// Perform FFT calculations
-            config = kiss_fft_alloc(nFft, 0, NULL, NULL);
+            config = kiss_fft_alloc(nFft_, 0, NULL, NULL);
             kiss_fft(config, in, out);
-            for (auto j = 0; j < nFft / 2; j++)
+            for (auto j = 0; j < nFft_ / 2; j++)
             {
             	// Skipping out[0], which is the DC bin (0Hz)
 	            const auto offset = j + 1;
-                fftBuffer.pushFrame(sqrt(out[offset].r * out[offset].r + out[offset].i * out[offset].i));
+                fftBuffer[j] = (sqrt(out[offset].r * out[offset].r + out[offset].i * out[offset].i));
             }
 
             kiss_fft_free(config);
             return 0;
         }
 
-        void setLinAvgFft(float* dest, int length) const
+        void setLinAvgFft(float* dest, const int length) const
         {
             // Linear averaging to reduce the number of FFT bands
-            const auto fft = new float[fftBuffer_.getSize()];
-            const auto avgWidth = int(nFft / 2 / length);
-            fftBuffer_.copyRecentFrames(fft, fftBuffer_.getSize());
-
+            const auto avgWidth = int(nFft_ / 2 / length);
             for (auto i = 0; i < length; i++)
             {
                 float avg = 0;
@@ -281,16 +277,88 @@ namespace Lasp
                 for (j = 0; j < avgWidth; j++)
                 {
                     const auto offset = j + i * avgWidth;
-                    if (offset < nFft)
-                        avg += fft[offset];
+                    if (offset < nFft_)
+                        avg += fftBuffer_[offset];
                     else
                         break;
                 }
                 avg /= float(j + 1);
                 dest[i] = avg;
             }
+        }
 
-            delete[] fft;
+        void setLogAvgFft(float* dest, int length) const
+        {
+        	// Log based averaging, which more closely resembles how humans perceive sound
+	        const auto sampleRate = getSampleRate();
+            const auto minBandwidth = 60;
+        	auto nyq = sampleRate / 2.0f;
+            auto octaves = 1;
+        	// Log averaging algorithm returns one less band
+            length++;
+        	
+            while ((nyq /= 2) > minBandwidth)
+            {
+                octaves++;
+            }
+
+	        const auto bandsPerOctave = float(length) / octaves;
+	        const auto averages = new float[int(length)] ;
+            for (auto i = 0; i < octaves; i++)
+            {
+                float lowFreq;
+                if (i == 0)
+                {
+                    lowFreq = 0;
+                }
+                else
+                {
+                    lowFreq = (sampleRate / 2) / float(pow(2, octaves - i));
+                }
+
+                const auto hiFreq = (sampleRate / 2) / float(pow(2, octaves - i - 1));
+                const auto freqStep = (hiFreq - lowFreq) / bandsPerOctave;
+                auto f = lowFreq;
+                for (auto j = 0; j < bandsPerOctave; j++)
+                {
+	                const auto offset = int(j + i * bandsPerOctave);
+                    averages[offset] = calculateAvg(f, f + freqStep);
+                    f += freqStep;
+                }
+            }
+
+        	for (auto i = 0; i < length; i++)
+        	{
+                dest[i] = averages[i];
+        	}
+            delete[] averages;
+        }
+
+        float calculateAvg(const float lowFreq, const float hiFreq) const
+        {
+	        const auto lowBound = freqToIndex(lowFreq);
+	        const auto hiBound = freqToIndex(hiFreq);
+            float avg = 0;
+            for (auto i = lowBound; i <= hiBound; i++)
+            {
+                avg += fftBuffer_[i];
+            }
+            avg /= float(hiBound) - float(lowBound) + 1;
+            return avg;
+        }
+
+        int freqToIndex(const float freq) const
+        {
+            auto const bandWidth = (2.0f / nFft_) * (float(getSampleRate()) / 2.0f);
+
+            // Special case: freq is lower than the bandwidth of spectrum[0]
+            if (freq < bandWidth / 2) return 0;
+            // Special case: freq is within the bandwidth of spectrum[spectrum.length - 1]
+            if (freq > getSampleRate() / 2 - bandWidth / 2) return sizeof(fftBuffer_) - 1;
+        	
+            const auto fraction = freq / float(getSampleRate());
+            const auto i = int(nFft_ * fraction);
+            return i;
         }
     };
 }

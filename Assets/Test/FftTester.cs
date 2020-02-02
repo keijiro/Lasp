@@ -1,10 +1,11 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Lasp;
 
 public class FftTester : MonoBehaviour
 {
-    [SerializeField] Lasp.FftAveragingType _averagingType = Lasp.FftAveragingType.Linear;
+    [SerializeField] FftAveragingType _averagingType = Lasp.FftAveragingType.Linear;
     [SerializeField] [Range(0, 32)] float _inputGain = 1.0f;
     [SerializeField] [Range(1, 64)] int _fftBands = 11;
     [SerializeField] bool _holdAndFallDown = true;
@@ -64,9 +65,10 @@ public class FftTester : MonoBehaviour
             Initialize();
         }
 
+        var gain = _averagingType == FftAveragingType.Linear ? _inputGain : _inputGain / 10.0f;
         for (var i = 0; i < _fftBands; i++)
         {
-            var input = Mathf.Clamp01(_inputGain * _fftIn[i] * (3 * i + 1));
+            var input = Mathf.Clamp01(gain * _fftIn[i] * (3 * i + 1));
             var dt = Time.deltaTime;
             if (_holdAndFallDown)
             {

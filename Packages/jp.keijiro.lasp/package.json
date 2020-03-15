@@ -1,0 +1,17 @@
+{
+    "author": "Keijiro Takahashi",
+    "dependencies": {
+        "com.unity.burst": "1.2.3",
+        "com.unity.mathematics": "1.1.0",
+        "jp.keijiro.libsoundio": "1.0.1"
+    },
+    "description": "Low-latency audio signal processing plugin for Unity",
+    "displayName": "LASP",
+    "keywords": [ "unity" ],
+    "license": "SEE LICENSE IN LICENSE",
+    "name": "jp.keijiro.lasp",
+    "repository": "github:keijiro/Lasp",
+    "unity": "2019.3",
+    "unityRelease": "1f1",
+    "version": "2.0.0"
+}

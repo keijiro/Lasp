@@ -1,0 +1,17 @@
+{
+    "name": "Lasp.Editor",
+    "references": [
+        "GUID:e438a90965872694392541e22197078e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

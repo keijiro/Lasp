@@ -8,6 +8,7 @@ namespace Lasp
     {
         #region Property accessors
 
+        public bool IsValid => _handle != null && _handle.IsValid;
         public string ID => _handle.SioDevice.ID;
         public string Name => _handle.SioDevice.Name;
         public int ChannelCount => _handle.SioDevice.Layouts[0].ChannelCount;

@@ -24,6 +24,9 @@ namespace Lasp
           => new DeviceDescriptor
              { _handle = InputDeviceList.FirstOrDefault(dev => dev.ID == id) };
 
+        public static DeviceDescriptor DefaultDevice
+          => new DeviceDescriptor{ _handle = InputDeviceList.FirstOrDefault() };
+
         public static InputStream GetInputStream(DeviceDescriptor desc)
           => InputStream.Create(desc._handle);
 

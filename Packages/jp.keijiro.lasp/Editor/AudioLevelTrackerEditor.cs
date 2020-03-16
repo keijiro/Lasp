@@ -41,9 +41,31 @@ namespace Lasp.Editor
 
         #endregion
 
-        #region Device selection dropdown
+        #region Device selector
 
-        void ShowDeviceSelector(Rect rect)
+        void ShowDeviceSelector()
+        {
+            // Use Default Device switch
+            EditorGUILayout.PropertyField
+              (_useDefaultDevice, Styles.DefaultDevice);
+
+            if (_useDefaultDevice.hasMultipleDifferentValues ||
+                !_useDefaultDevice.boolValue)
+            {
+                // ID field and selector dropdown
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PropertyField(_deviceID);
+                var rect = EditorGUILayout.GetControlRect
+                             (false, GUILayout.Width(60));
+                EditorGUILayout.EndHorizontal();
+
+                if (EditorGUI.DropdownButton
+                      (rect, Styles.Select, FocusType.Keyboard))
+                    CreateDeviceSelectMenu().DropDown(rect);
+            }
+        }
+
+        GenericMenu CreateDeviceSelectMenu()
         {
             var menu = new GenericMenu();
             var devices = Lasp.AudioSystem.InputDevices;
@@ -55,7 +77,7 @@ namespace Lasp.Editor
             else
                 menu.AddItem(Styles.NoDevice, false, null);
 
-            menu.DropDown(rect);
+            return menu;
         }
 
         void OnSelectDevice(object id)
@@ -100,24 +122,9 @@ namespace Lasp.Editor
         {
             serializedObject.Update();
 
-            // Device selection
-            EditorGUILayout.PropertyField
-              (_useDefaultDevice, Styles.DefaultDevice);
-
-            if (_useDefaultDevice.hasMultipleDifferentValues ||
-                !_useDefaultDevice.boolValue)
-            {
-                // ID field and selector dropdown
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.PropertyField(_deviceID);
-                var rect =
-                  EditorGUILayout.GetControlRect(false, GUILayout.Width(60));
-                EditorGUILayout.EndHorizontal();
-
-                if (EditorGUI.DropdownButton
-                      (rect, Styles.Select, FocusType.Keyboard))
-                    ShowDeviceSelector(rect);
-            }
+            // Device selection (disabled during play mode)
+            using (new EditorGUI.DisabledScope(Application.isPlaying))
+                ShowDeviceSelector();
 
             // Input settings
             EditorGUILayout.PropertyField(_channel);

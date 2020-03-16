@@ -11,6 +11,8 @@ namespace Lasp.Editor
     [CustomEditor(typeof(AudioLevelTracker))]
     sealed class AudioLevelTrackerEditor : UnityEditor.Editor
     {
+        #region Private members
+
         SerializedProperty _useDefaultDevice;
         SerializedProperty _deviceID;
         SerializedProperty _channel;
@@ -23,6 +25,10 @@ namespace Lasp.Editor
 
         PropertyBinderEditor _propertyBinderEditor;
 
+        #endregion
+
+        #region Labels
+
         static class Styles
         {
             public static Label NoDevice      = "No device available";
@@ -33,32 +39,43 @@ namespace Lasp.Editor
             public static Label Speed         = "Speed";
         }
 
-        // Device selection dropdown menu used for setting the device ID
-        void ShowDeviceSelectionDropdown(Rect rect)
+        #endregion
+
+        #region Device selection dropdown
+
+        void ShowDeviceSelector(Rect rect)
         {
             var menu = new GenericMenu();
             var devices = Lasp.AudioSystem.InputDevices;
 
             if (devices.Any())
                 foreach (var dev in devices)
-                    menu.AddItem(new GUIContent(dev.Name), false, OnSelectDevice, dev.ID);
+                    menu.AddItem(new GUIContent(dev.Name),
+                                 false, OnSelectDevice, dev.ID);
             else
                 menu.AddItem(Styles.NoDevice, false, null);
 
             menu.DropDown(rect);
         }
 
-        // Device selection menu item callback
         void OnSelectDevice(object id)
         {
             serializedObject.Update();
+            // Trash the stringValue before setting the ID
+            // to avoid issue #1228004.
+            _deviceID.stringValue = "xx.invalid.id.xx";
             _deviceID.stringValue = (string)id;
             serializedObject.ApplyModifiedProperties();
         }
 
+        #endregion
+
+        #region Editor implementation
+
         void OnEnable()
         {
             var finder = new PropertyFinder(serializedObject);
+
             _useDefaultDevice = finder["_useDefaultDevice"];
             _deviceID         = finder["_deviceID"];
             _channel          = finder["_channel"];
@@ -84,18 +101,22 @@ namespace Lasp.Editor
             serializedObject.Update();
 
             // Device selection
-            EditorGUILayout.PropertyField(_useDefaultDevice, Styles.DefaultDevice);
+            EditorGUILayout.PropertyField
+              (_useDefaultDevice, Styles.DefaultDevice);
 
             if (_useDefaultDevice.hasMultipleDifferentValues ||
                 !_useDefaultDevice.boolValue)
             {
-                // ID field and Select dropdown menu
+                // ID field and selector dropdown
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PropertyField(_deviceID);
-                var rect = EditorGUILayout.GetControlRect(false, GUILayout.Width(60));
-                if (EditorGUI.DropdownButton(rect, Styles.Select, FocusType.Keyboard))
-                    ShowDeviceSelectionDropdown(rect);
+                var rect =
+                  EditorGUILayout.GetControlRect(false, GUILayout.Width(60));
                 EditorGUILayout.EndHorizontal();
+
+                if (EditorGUI.DropdownButton
+                      (rect, Styles.Select, FocusType.Keyboard))
+                    ShowDeviceSelector(rect);
             }
 
             // Input settings
@@ -144,5 +165,7 @@ namespace Lasp.Editor
             // Property binders
             if (targets.Length == 1) _propertyBinderEditor.ShowGUI();
         }
+
+        #endregion
     }
 }

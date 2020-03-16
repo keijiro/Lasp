@@ -20,7 +20,7 @@ namespace Lasp
         #region Editor attributes and public properties
 
         // Channel Selection
-        [SerializeField] int _channel = 0;
+        [SerializeField, Range(0, 15)] int _channel = 0;
         public int channel
           { get => _channel;
             set => _channel = value; }

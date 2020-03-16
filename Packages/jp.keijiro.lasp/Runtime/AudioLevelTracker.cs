@@ -9,15 +9,19 @@ namespace Lasp
     [AddComponentMenu("LASP/Audio Level Tracker")]
     public sealed class AudioLevelTracker : MonoBehaviour
     {
-        #region Editor-only attributes
-
-        // Device selection
-        [SerializeField] bool _useDefaultDevice = true;
-        [SerializeField] string _deviceID = "";
-
-        #endregion
-
         #region Editor attributes and public properties
+
+        // System default device switch
+        [SerializeField] bool _useDefaultDevice = true;
+        public bool useDefaultDevice
+          { get => _useDefaultDevice;
+            set => TrySelectDevice(null); }
+
+        // Device ID to use
+        [SerializeField] string _deviceID = "";
+        public string deviceID
+          { get => _deviceID;
+            set => TrySelectDevice(value); }
 
         // Channel Selection
         [SerializeField, Range(0, 15)] int _channel = 0;
@@ -62,7 +66,10 @@ namespace Lasp
             set => _fallDownSpeed = value; }
 
         // Property binders
-        [SerializeReference] PropertyBinder [] _propertyBinders = null;
+        [SerializeReference] PropertyBinder[] _propertyBinders = null;
+        public PropertyBinder[] propertyBinders
+          { get => (PropertyBinder[])_propertyBinders.Clone();
+            set => _propertyBinders = value; }
 
         #endregion
 
@@ -101,6 +108,19 @@ namespace Lasp
 
         // Hold and fall down animation parameter
         float _fall = 0;
+
+        // Check the status and try selecting the device.
+        void TrySelectDevice(string id)
+        {
+            // At the moment, we only supports selecting a device before the
+            // stream is initialized.
+            if (_stream != null)
+                throw new System.InvalidOperationException
+                  ("Stream is already open");
+
+            _useDefaultDevice = string.IsNullOrEmpty(id);
+            _deviceID = id;
+        }
 
         // Input stream object with local cache
         InputStream Stream
@@ -157,7 +177,8 @@ namespace Lasp
             }
 
             // Output
-            foreach (var b in _propertyBinders) b.Level = _normalizedLevel;
+            if (_propertyBinders != null)
+                foreach (var b in _propertyBinders) b.Level = _normalizedLevel;
         }
 
         #endregion

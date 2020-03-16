@@ -93,7 +93,7 @@ namespace Lasp.Editor
 
             var toggle = CoreEditorUtils.DrawHeaderToggle
               (PropertyBinderNameUtil.Shorten(prop),
-               prop, finder["_enabled"],
+               prop, finder["Enabled"],
                pos => CreateHeaderContextMenu(index)
                       .DropDown(new Rect(pos, Vector2.zero)));
 
@@ -103,15 +103,15 @@ namespace Lasp.Editor
             EditorGUILayout.Space();
 
             // Properties
-            var target = finder["_target"];
+            var target = finder["Target"];
             EditorGUILayout.PropertyField(target);
 
             if (ComponentSelector.GetInstance(target).ShowGUI(target) &&
                 PropertySelector.GetInstance(target, finder["_propertyType"])
-                .ShowGUI(finder["_propertyName"]))
+                .ShowGUI(finder["PropertyName"]))
             {
-                EditorGUILayout.PropertyField(finder["_value0"], Styles.Value0);
-                EditorGUILayout.PropertyField(finder["_value1"], Styles.Value1);
+                EditorGUILayout.PropertyField(finder["Value0"], Styles.Value0);
+                EditorGUILayout.PropertyField(finder["Value1"], Styles.Value1);
             }
 
             _binders.serializedObject.ApplyModifiedProperties();

@@ -187,8 +187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c3e183ec27ba64d83e010bf18edb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDefaultDevice: 1
-  _deviceID: 
+  _useDefaultDevice: 0
+  _deviceID: '{0.0.1.00000000}.{73c3ea8e-4565-4955-929b-b4c9e7a89a58}'
   _channel: 0
   _filterType: 1
   _autoGain: 1
@@ -203,13 +203,13 @@ MonoBehaviour:
     00000000:
       type: {class: Vector3PropertyBinder, ns: Lasp, asm: Lasp.Runtime}
       data:
-        _enabled: 1
-        _target: {fileID: 1562760351}
-        _propertyName: localScale
+        Enabled: 1
+        Target: {fileID: 1562760351}
+        PropertyName: localScale
         _propertyType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-        _value0: {x: 0, y: 1, z: 1}
-        _value1: {x: 1, y: 1, z: 1}
+        Value0: {x: 0, y: 1, z: 1}
+        Value1: {x: 1, y: 1, z: 1}
 --- !u!4 &206015882
 Transform:
   m_ObjectHideFlags: 0
@@ -253,8 +253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c3e183ec27ba64d83e010bf18edb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDefaultDevice: 1
-  _deviceID: 
+  _useDefaultDevice: 0
+  _deviceID: '{0.0.1.00000000}.{73c3ea8e-4565-4955-929b-b4c9e7a89a58}'
   _channel: 0
   _filterType: 3
   _autoGain: 1
@@ -269,13 +269,13 @@ MonoBehaviour:
     00000000:
       type: {class: Vector3PropertyBinder, ns: Lasp, asm: Lasp.Runtime}
       data:
-        _enabled: 1
-        _target: {fileID: 2104869604}
-        _propertyName: localScale
+        Enabled: 1
+        Target: {fileID: 2104869604}
+        PropertyName: localScale
         _propertyType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-        _value0: {x: 0, y: 1, z: 1}
-        _value1: {x: 1, y: 1, z: 1}
+        Value0: {x: 0, y: 1, z: 1}
+        Value1: {x: 1, y: 1, z: 1}
 --- !u!4 &492029192
 Transform:
   m_ObjectHideFlags: 0
@@ -832,8 +832,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c3e183ec27ba64d83e010bf18edb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDefaultDevice: 1
-  _deviceID: 
+  _useDefaultDevice: 0
+  _deviceID: '{0.0.1.00000000}.{73c3ea8e-4565-4955-929b-b4c9e7a89a58}'
   _channel: 0
   _filterType: 2
   _autoGain: 1
@@ -848,13 +848,13 @@ MonoBehaviour:
     00000000:
       type: {class: Vector3PropertyBinder, ns: Lasp, asm: Lasp.Runtime}
       data:
-        _enabled: 1
-        _target: {fileID: 586027811}
-        _propertyName: localScale
+        Enabled: 1
+        Target: {fileID: 586027811}
+        PropertyName: localScale
         _propertyType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-        _value0: {x: 0, y: 1, z: 1}
-        _value1: {x: 1, y: 1, z: 1}
+        Value0: {x: 0, y: 1, z: 1}
+        Value1: {x: 1, y: 1, z: 1}
 --- !u!4 &1371227277
 Transform:
   m_ObjectHideFlags: 0
@@ -1272,8 +1272,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c3e183ec27ba64d83e010bf18edb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDefaultDevice: 1
-  _deviceID: 
+  _useDefaultDevice: 0
+  _deviceID: '{0.0.1.00000000}.{73c3ea8e-4565-4955-929b-b4c9e7a89a58}'
   _channel: 0
   _filterType: 0
   _autoGain: 1
@@ -1288,13 +1288,13 @@ MonoBehaviour:
     00000000:
       type: {class: Vector3PropertyBinder, ns: Lasp, asm: Lasp.Runtime}
       data:
-        _enabled: 1
-        _target: {fileID: 1314719272}
-        _propertyName: localScale
+        Enabled: 1
+        Target: {fileID: 1314719272}
+        PropertyName: localScale
         _propertyType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-        _value0: {x: 0, y: 1, z: 1}
-        _value1: {x: 1, y: 1, z: 1}
+        Value0: {x: 0, y: 1, z: 1}
+        Value1: {x: 1, y: 1, z: 1}
 --- !u!4 &1796789574
 Transform:
   m_ObjectHideFlags: 0

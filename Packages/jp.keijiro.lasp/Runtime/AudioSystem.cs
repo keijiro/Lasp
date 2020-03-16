@@ -20,7 +20,7 @@ namespace Lasp
           => InputDeviceList.
              Select(dev => new DeviceDescriptor { _handle = dev });
 
-        public static DeviceDescriptor FindInputDevice(string id)
+        public static DeviceDescriptor GetInputDevice(string id)
           => new DeviceDescriptor
              { _handle = InputDeviceList.FirstOrDefault(dev => dev.ID == id) };
 
@@ -34,7 +34,7 @@ namespace Lasp
           => InputStream.Create(InputDeviceList.FirstOrDefault());
 
         public static InputStream GetInputStream(string id)
-          => GetInputStream(FindInputDevice(id));
+          => GetInputStream(GetInputDevice(id));
 
         #endregion
 

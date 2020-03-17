@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+//
+// Runtime device selection and AudioLevelTracker instantiation example
+//
 class DeviceSelector : MonoBehaviour
 {
     #region Scene object references

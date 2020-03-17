@@ -187,8 +187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c3e183ec27ba64d83e010bf18edb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDefaultDevice: 0
-  _deviceID: '{0.0.1.00000000}.{73c3ea8e-4565-4955-929b-b4c9e7a89a58}'
+  _useDefaultDevice: 1
+  _deviceID: 
   _channel: 0
   _filterType: 1
   _autoGain: 1
@@ -253,8 +253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c3e183ec27ba64d83e010bf18edb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDefaultDevice: 0
-  _deviceID: '{0.0.1.00000000}.{73c3ea8e-4565-4955-929b-b4c9e7a89a58}'
+  _useDefaultDevice: 1
+  _deviceID: 
   _channel: 0
   _filterType: 3
   _autoGain: 1
@@ -832,8 +832,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c3e183ec27ba64d83e010bf18edb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDefaultDevice: 0
-  _deviceID: '{0.0.1.00000000}.{73c3ea8e-4565-4955-929b-b4c9e7a89a58}'
+  _useDefaultDevice: 1
+  _deviceID: 
   _channel: 0
   _filterType: 2
   _autoGain: 1
@@ -1272,8 +1272,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c3e183ec27ba64d83e010bf18edb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useDefaultDevice: 0
-  _deviceID: '{0.0.1.00000000}.{73c3ea8e-4565-4955-929b-b4c9e7a89a58}'
+  _useDefaultDevice: 1
+  _deviceID: 
   _channel: 0
   _filterType: 0
   _autoGain: 1

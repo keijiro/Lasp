@@ -5,7 +5,7 @@ using System.Linq;
 //
 // Runtime device selection and AudioLevelTracker instantiation example
 //
-class DeviceSelector : MonoBehaviour
+sealed class DeviceSelector : MonoBehaviour
 {
     #region Scene object references
 
@@ -57,6 +57,14 @@ class DeviceSelector : MonoBehaviour
         // If there is any input device, select the first one.
         //
         if (Lasp.AudioSystem.InputDevices.Any()) OnDeviceSelected(0);
+    }
+
+    void Update()
+    {
+        //
+        // Apply the channel selection to the audio level tracker.
+        //
+        if (_tracker != null) _tracker.channel = _channelList.value;
     }
 
     #endregion

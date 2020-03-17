@@ -4,7 +4,7 @@ using System.Linq;
 //
 // Audio input device enumeration example
 //
-class DeviceList : MonoBehaviour
+sealed class DeviceList : MonoBehaviour
 {
     #region Scene object reference
 

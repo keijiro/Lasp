@@ -3,7 +3,27 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public sealed class WaveformRenderer : MonoBehaviour
+//
+// Raw waveform rendering example
+//
+// There are two approaches to retrieve raw waveform data from LASP.
+//
+// - AudioLevelTracker.AudioDataSlice: This property returns a strided native
+//   slice that represents a raw waveform received at a specified channel of a
+//   specified device. The length of the slice is the same as the duration of
+//   the last frame, so you can continuously retrieve waveform data every frame
+//   without bothering to buffer it.
+//
+// - The InputStream class provides some properties and methods for raw
+//   waveform retrieval: InterleavedDataSpan, InterleavedDataSlice, and
+//   GetChannelDataSlice. The former two properties return N-channel
+//   interleaved data span/slice. You have to read them in a strided way if you
+//   want individual channel data.
+//
+// This renderer script supports the former approach. It simply convert the
+// waveform data into a vertex array and renders as a line strip mesh.
+//
+sealed class WaveformRenderer : MonoBehaviour
 {
     #region Editable attributes
 
@@ -17,11 +37,12 @@ public sealed class WaveformRenderer : MonoBehaviour
 
     void Update()
     {
+        // Waveform retrieval
         var slice = _input.AudioDataSlice;
         if (slice.Length == 0) return;
 
+        // Line strip mesh update and rendering
         UpdateMesh(slice);
-
         Graphics.DrawMesh
           (_mesh, transform.localToWorldMatrix,
            _material, gameObject.layer);

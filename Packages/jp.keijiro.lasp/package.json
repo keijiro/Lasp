@@ -8,7 +8,7 @@
     "description": "Low-latency audio signal processing plugin for Unity",
     "displayName": "LASP",
     "keywords": [ "unity" ],
-    "license": "SEE LICENSE IN LICENSE",
+    "license": "MIT",
     "name": "jp.keijiro.lasp",
     "repository": "github:keijiro/Lasp",
     "unity": "2019.3",

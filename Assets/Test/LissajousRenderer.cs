@@ -5,24 +5,19 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 //
-// Raw waveform rendering example
+// InputStream usage example (Lissajous curve renderer)
 //
-// There are two approaches to retrieve raw waveform data from LASP.
+// LASP provides not only MonoBehaviour-based class but also a raw input stream
+// class (InputStream) that allows an application to access pre-normalized
+// audio levels and waveform data (per-channel or interleaved). It's convenient
+// to access audio data when you don't need the level tracking algorithm or the
+// property binding mechanism.
 //
-// - AudioLevelTracker.AudioDataSlice: This property returns a strided native
-//   slice that represents a raw waveform received at a specified channel of a
-//   specified device. The length of the slice is the same as the duration of
-//   the last frame, so you can continuously retrieve waveform data every frame
-//   without bothering to buffer it.
+// LASP automatically manages InputStream instances. You can open an input
+// stream at any time, and it starts streaming when you access the actual data.
+// It's automatically released when you stop using it.
 //
-// - The InputStream class provides some properties and methods for raw
-//   waveform retrieval: InterleavedDataSpan, InterleavedDataSlice, and
-//   GetChannelDataSlice. The former two properties return N-channel
-//   interleaved data span/slice. You have to read them in a strided way if you
-//   want individual channel data.
-//
-// This renderer script supports the former approach. It simply convert the
-// waveform data into a vertex array and renders as a line strip mesh.
+// This example shows how to use InputStream to retrieve multiple channel data.
 //
 sealed class LissajousRenderer : MonoBehaviour
 {
@@ -31,29 +26,23 @@ sealed class LissajousRenderer : MonoBehaviour
     [SerializeField] Material _material = null;
     [SerializeField, Range(0, 10)] float _amplitude = 1;
 
+    // Public accessor (needed to be controlled by UI)
     public float amplitude { get => _amplitude; set => _amplitude = value; }
 
     #endregion
 
     #region MonoBehaviour implementation
 
-    //
-    // Input stream object
-    //
-    // LASP manages input streams in an automatic fashion. You can create an
-    // input stream any time, and it starts streaming when you access the data.
-    // It's automatically released when you stop using it.
-    //
     Lasp.InputStream _stream;
 
     void Start()
     {
         //
-        // Create an input stream for the default audio input device.
+        // Create an input stream from the system default input device.
         //
         _stream = Lasp.AudioSystem.GetDefaultInputStream();
 
-        // Check if it's stereo device (Lissajous only works with stereo).
+        // Check if it's a stereo device (Lissajous only works with stereo).
         if (_stream.ChannelCount != 2)
         {
             Debug.LogError("This example only supports a stereo device.");
@@ -61,7 +50,7 @@ sealed class LissajousRenderer : MonoBehaviour
             return;
         }
 
-        // Line strip mesh initialization
+        // Line mesh initialization
         InitializeMesh();
     }
 
@@ -69,14 +58,14 @@ sealed class LissajousRenderer : MonoBehaviour
     {
         //
         // Retrieve interleaved waveform data from the stream. The left and
-        // right channel data is interleaved in this single slice.
+        // right channel data is interleaved in this slice.
         //
         var slice = _stream.InterleavedDataSlice;
 
-        // Update the line strip mesh.
+        // Update the line mesh.
         UpdateMesh(slice);
 
-        // Draw the line strip mesh.
+        // Draw the line mesh.
         Graphics.DrawMesh
           (_mesh, transform.localToWorldMatrix,
            _material, gameObject.layer);
@@ -99,7 +88,7 @@ sealed class LissajousRenderer : MonoBehaviour
     Mesh _mesh;
 
     // The number of vertices.
-    // 2048 is enough for handling 48,000Hz audio at 30fps.
+    // 2048 is enough for rendering 48,000Hz audio at 30fps.
     const int VertexCount = 2048;
 
     void InitializeMesh()
@@ -152,11 +141,15 @@ sealed class LissajousRenderer : MonoBehaviour
 
         while (sidx < source.Length && vidx < VertexCount)
         {
+            // Decompose the interleaved channel data.
             var l = source[sidx++];
             var r = source[sidx++];
+
+            // Calculate the ertex position from the L-R channel values.
             vertices[vidx++] = math.float3(l, r, 0) * _amplitude;
         }
 
+        // Fill the rest of the array with the last vertex.
         var last = vidx == 0 ? float3.zero : vertices[vidx - 1];
         while (vidx < VertexCount) vertices[vidx++] = last;
 

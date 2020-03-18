@@ -53,17 +53,17 @@ namespace Lasp
           { get => _dynamicRange;
             set => _dynamicRange = value; }
 
-        // "Hold and fall down" animation switch
-        [SerializeField] bool _holdAndFallDown = true;
-        public bool holdAndFallDown
-          { get => _holdAndFallDown;
-            set => _holdAndFallDown = value; }
+        // Smooth fall animation switch
+        [SerializeField] bool _smoothFall = true;
+        public bool smoothFall
+          { get => _smoothFall;
+            set => _smoothFall = value; }
 
-        // Fall down animation speed
-        [SerializeField, Range(0, 1)] float _fallDownSpeed = 0.3f;
-        public float fallDownSpeed
-          { get => _fallDownSpeed;
-            set => _fallDownSpeed = value; }
+        // Fall animation speed
+        [SerializeField, Range(0, 1)] float _fallSpeed = 0.3f;
+        public float fallSpeed
+          { get => _fallSpeed;
+            set => _fallSpeed = value; }
 
         // Property binders
         [SerializeReference] PropertyBinder[] _propertyBinders = null;
@@ -158,10 +158,10 @@ namespace Lasp
             var normalizedInput
               = Mathf.Clamp01((input + currentGain) / _dynamicRange + 1);
 
-            if (_holdAndFallDown)
+            if (_smoothFall)
             {
                 // Hold and fall down animation
-                _fall += Mathf.Pow(10, 1 + _fallDownSpeed * 2) * dt;
+                _fall += Mathf.Pow(10, 1 + _fallSpeed * 2) * dt;
                 _normalizedLevel -= _fall * dt;
 
                 // Pull up by input.

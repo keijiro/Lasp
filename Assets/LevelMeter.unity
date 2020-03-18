@@ -194,8 +194,8 @@ MonoBehaviour:
   _autoGain: 1
   _gain: 6
   _dynamicRange: 20
-  _holdAndFallDown: 1
-  _fallDownSpeed: 0.75
+  _smoothFall: 1
+  _fallSpeed: 0.3
   _propertyBinders:
   - id: 0
   references:
@@ -260,8 +260,8 @@ MonoBehaviour:
   _autoGain: 1
   _gain: 6
   _dynamicRange: 20
-  _holdAndFallDown: 1
-  _fallDownSpeed: 0.75
+  _smoothFall: 1
+  _fallSpeed: 0.3
   _propertyBinders:
   - id: 0
   references:
@@ -839,8 +839,8 @@ MonoBehaviour:
   _autoGain: 1
   _gain: 6
   _dynamicRange: 20
-  _holdAndFallDown: 1
-  _fallDownSpeed: 0.75
+  _smoothFall: 1
+  _fallSpeed: 0.3
   _propertyBinders:
   - id: 0
   references:
@@ -1279,8 +1279,8 @@ MonoBehaviour:
   _autoGain: 1
   _gain: 6
   _dynamicRange: 20
-  _holdAndFallDown: 1
-  _fallDownSpeed: 0.75
+  _smoothFall: 1
+  _fallSpeed: 0.3
   _propertyBinders:
   - id: 0
   references:
@@ -1416,7 +1416,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _input: {fileID: 1796789572}
-  _resolution: 512
   _material: {fileID: 2100000, guid: 44d7894199f9faa49989105cd9a6563f, type: 2}
 --- !u!4 &2034002325
 Transform:

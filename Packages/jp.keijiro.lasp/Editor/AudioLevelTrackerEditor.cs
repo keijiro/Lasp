@@ -20,8 +20,8 @@ namespace Lasp.Editor
         SerializedProperty _dynamicRange;
         SerializedProperty _autoGain;
         SerializedProperty _gain;
-        SerializedProperty _holdAndFallDown;
-        SerializedProperty _fallDownSpeed;
+        SerializedProperty _smoothFall;
+        SerializedProperty _fallSpeed;
 
         PropertyBinderEditor _propertyBinderEditor;
 
@@ -36,7 +36,6 @@ namespace Lasp.Editor
             public static Label Select        = "Select";
             public static Label DynamicRange  = "Dynamic Range (dB)";
             public static Label Gain          = "Gain (dB)";
-            public static Label Speed         = "Speed";
         }
 
         #endregion
@@ -105,8 +104,8 @@ namespace Lasp.Editor
             _dynamicRange     = finder["_dynamicRange"];
             _autoGain         = finder["_autoGain"];
             _gain             = finder["_gain"];
-            _holdAndFallDown  = finder["_holdAndFallDown"];
-            _fallDownSpeed    = finder["_fallDownSpeed"];
+            _smoothFall       = finder["_smoothFall"];
+            _fallSpeed        = finder["_fallSpeed"];
 
             _propertyBinderEditor
               = new PropertyBinderEditor(finder["_propertyBinders"]);
@@ -141,14 +140,14 @@ namespace Lasp.Editor
                 EditorGUI.indentLevel--;
             }
 
-            EditorGUILayout.PropertyField(_holdAndFallDown);
+            EditorGUILayout.PropertyField(_smoothFall);
 
-            // Show Fall Down Speed when "Hold And Fall Down" is on.
-            if (_holdAndFallDown.hasMultipleDifferentValues ||
-                _holdAndFallDown.boolValue)
+            // Show Fall Speed when Smooth Fall is on.
+            if (_smoothFall.hasMultipleDifferentValues ||
+                _smoothFall.boolValue)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(_fallDownSpeed, Styles.Speed);
+                EditorGUILayout.PropertyField(_fallSpeed);
                 EditorGUI.indentLevel--;
             }
 

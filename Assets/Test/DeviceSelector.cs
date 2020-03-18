@@ -5,6 +5,12 @@ using System.Linq;
 //
 // Runtime device selection and AudioLevelTracker instantiation example
 //
+// Usually, autio level trackers are configured on Editor, but in some use
+// cases, you may want to instantiate and configure them at run time. This
+// example shows how to select an input device using the AudioSystem properties
+// and instantiate an audio level tracker from it at run time. It also shows
+// how to construct property binders programmatically.
+//
 sealed class DeviceSelector : MonoBehaviour
 {
     #region Scene object references
@@ -19,8 +25,8 @@ sealed class DeviceSelector : MonoBehaviour
 
     //
     // We want the dropdown items to have device identifier, so we extend the
-    // OptionData class and add the id field. Also we add a constructor that
-    // initializes the data based on a LASP device descriptor.
+    // OptionData class to add an ID field. Also we add a constructor that
+    // initializes the data from a device descriptor.
     //
     class DeviceItem : Dropdown.OptionData
     {
@@ -33,7 +39,6 @@ sealed class DeviceSelector : MonoBehaviour
 
     #region MonoBehaviour implementation
 
-    // Reference to the level tracker object that is created by this script.
     Lasp.AudioLevelTracker _tracker;
 
     void Start()
@@ -44,8 +49,8 @@ sealed class DeviceSelector : MonoBehaviour
         //
         // Construct the device selection dropdown list.
         //
-        // LASP provides IEnumerable of available audio input devices with
-        // AudioSystem.InputDevices. Here we construct the dropdown list from
+        // LASP provides IEnumerable of currently available audio input devices
+        // via AudioSystem.InputDevices. Here we construct a dropdown list from
         // it using LINQ.
         //
         _deviceList.options.AddRange
@@ -54,7 +59,8 @@ sealed class DeviceSelector : MonoBehaviour
         _deviceList.RefreshShownValue();
 
         //
-        // If there is any input device, select the first one.
+        // If there is any input device, select the first one (the system
+        // default input device).
         //
         if (Lasp.AudioSystem.InputDevices.Any()) OnDeviceSelected(0);
     }
@@ -77,40 +83,39 @@ sealed class DeviceSelector : MonoBehaviour
         var id = ((DeviceItem)_deviceList.options[index]).id;
 
         //
-        // In LASP, we can specify an input device using ID (not a display
-        // name). We also can use AudioSystem.DefaultDevice that returns the
-        // system default input device.
+        // Retrieve a descriptor of the selected device using the ID.
         //
         var dev = Lasp.AudioSystem.GetInputDevice(id);
 
         //
-        // The DeviceDescriptor struct contains several information, like
-        // the number of the channels and the sampling rate. Here we construct
-        // the channel selection dropdown list from the descriptor.
+        // The device descriptor struct has several attributes, like the number
+        // of the channels, the sampling rate, etc. Here we construct the
+        // channel selection dropdown list from the descriptor.
         //
         _channelList.options =
           Enumerable.Range(0, dev.ChannelCount).
           Select(i => $"Channel {i + 1}").
           Select(text => new Dropdown.OptionData(){ text = text }).ToList();
 
+        _channelList.value = 0;
         _channelList.RefreshShownValue();
 
-        // Destroy the previously created level tracker object.
+        // Destroy the previously created level tracker object...
         if (_tracker != null) Destroy(_tracker.gameObject);
 
-        // Create a new level tracker game object.
+        // ...then create a new one.
         var gameObject = new GameObject("Level Tracker");
 
         //
-        // Add the LASP audio level tracker component to the game object.
-        // Then make the tracker use the chosen device.
+        // Add the LASP audio level tracker component to the game object and
+        // make it use the selected device.
         //
         _tracker = gameObject.AddComponent<Lasp.AudioLevelTracker>();
         _tracker.deviceID = dev.ID;
 
         //
         // Add a property binder to the tracker that controls the scale of the
-        // target transform based on the audio level.
+        // target transform based on a normalize audio level.
         //
         _tracker.propertyBinders =
           new [] {

@@ -1,12 +1,13 @@
 using System.Linq;
 using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 //
 // Raw waveform rendering example
 //
-// There are two approaches to retrieve raw waveform data from LASP.
+// There are two approaches to retrieve raw waveforms from LASP.
 //
 // - AudioLevelTracker.AudioDataSlice: This property returns a strided native
 //   slice that represents a raw waveform received at a specified channel of a
@@ -14,35 +15,41 @@ using UnityEngine.Rendering;
 //   the last frame, so you can continuously retrieve waveform data every frame
 //   without bothering to buffer it.
 //
-// - The InputStream class provides some properties and methods for raw
-//   waveform retrieval: InterleavedDataSpan, InterleavedDataSlice, and
+// - The InputStream class provides properties and methods for raw waveform
+//   retrieval: InterleavedDataSpan, InterleavedDataSlice, and
 //   GetChannelDataSlice. The former two properties return N-channel
 //   interleaved data span/slice. You have to read them in a strided way if you
 //   want individual channel data.
 //
-// This renderer script supports the former approach. It simply convert the
-// waveform data into a vertex array and renders as a line strip mesh.
+// This renderer script uses the former approach. It converts a waveform into a
+// vertex array and renders it as a line strip mesh.
 //
 sealed class WaveformRenderer : MonoBehaviour
 {
     #region Editable attributes
 
     [SerializeField] Lasp.AudioLevelTracker _input = null;
-    [SerializeField, Range(16, 1024)] int _resolution = 512;
     [SerializeField] Material _material = null;
 
     #endregion
 
     #region MonoBehaviour implementation
 
+    void Start()
+    {
+        // Line mesh initialization
+        InitializeMesh();
+    }
+
     void Update()
     {
-        // Waveform retrieval
-        var slice = _input.AudioDataSlice;
-        if (slice.Length == 0) return;
+        //
+        // Retrieve waveform data as a channel-strided data slice and then
+        // update the line mesh with it.
+        //
+        UpdateMesh(_input.AudioDataSlice);
 
-        // Line strip mesh update and rendering
-        UpdateMesh(slice);
+        // Draw the line mesh.
         Graphics.DrawMesh
           (_mesh, transform.localToWorldMatrix,
            _material, gameObject.layer);
@@ -55,68 +62,73 @@ sealed class WaveformRenderer : MonoBehaviour
 
     #endregion
 
-    #region Mesh generator
+    #region Line mesh operations
 
     Mesh _mesh;
 
+    // The number of vertices.
+    // 2048 is enough for rendering 48,000Hz audio at 30fps.
+    const int VertexCount = 2048;
+
+    void InitializeMesh()
+    {
+        _mesh = new Mesh();
+        _mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 10);
+
+        // Initial vertices
+        using (var vertices = CreateVertexArray(default(NativeSlice<float>)))
+        {
+            var desc = new VertexAttributeDescriptor
+              (VertexAttribute.Position, VertexAttributeFormat.Float32, 3);
+
+            _mesh.SetVertexBufferParams(vertices.Length, desc);
+            _mesh.SetVertexBufferData(vertices, 0, 0, vertices.Length);
+        }
+
+        // Initial indices
+        using (var indices = CreateIndexArray())
+        {
+            var desc = new SubMeshDescriptor
+              (0, indices.Length, MeshTopology.LineStrip);
+
+            _mesh.SetIndexBufferParams(indices.Length, IndexFormat.UInt32);
+            _mesh.SetIndexBufferData(indices, 0, 0, indices.Length);
+            _mesh.SetSubMesh(0, desc);
+        }
+    }
+
     void UpdateMesh(NativeSlice<float> source)
     {
-        if (_mesh == null)
-        {
-            _mesh = new Mesh();
-            _mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 10);
-
-            // Initial vertices
-            using (var vertices = CreateVertexArray(source))
-            {
-                var pos = new VertexAttributeDescriptor
-                  (VertexAttribute.Position,
-                   VertexAttributeFormat.Float32, 3);
-
-                _mesh.SetVertexBufferParams(vertices.Length, pos);
-                _mesh.SetVertexBufferData(vertices, 0, 0, vertices.Length);
-            }
-
-            // Initial indices
-            using (var indices = CreateIndexArray())
-            {
-                _mesh.SetIndexBufferParams(indices.Length, IndexFormat.UInt32);
-                _mesh.SetIndexBufferData(indices, 0, 0, indices.Length);
-
-                var lines = new SubMeshDescriptor
-                  (0, indices.Length, MeshTopology.LineStrip);
-
-                _mesh.SetSubMesh(0, lines);
-            }
-        }
-        else
-        {
-            // Vertex update
-            using (var vertices = CreateVertexArray(source))
-              _mesh.SetVertexBufferData(vertices, 0, 0, vertices.Length);
-        }
+        using (var vertices = CreateVertexArray(source))
+            _mesh.SetVertexBufferData(vertices, 0, 0, vertices.Length);
     }
 
     NativeArray<int> CreateIndexArray()
     {
-        var indices = Enumerable.Range(0, _resolution);
-        return new NativeArray<int>(indices.ToArray(), Allocator.Temp);
+        return new NativeArray<int>
+          (Enumerable.Range(0, VertexCount).ToArray(), Allocator.Temp);
     }
 
-    NativeArray<Vector3> CreateVertexArray(NativeSlice<float> source)
+    NativeArray<float3> CreateVertexArray(NativeSlice<float> source)
     {
-        var buffer = new NativeArray<Vector3>
-          (_resolution, Allocator.Temp,
+        var vertices = new NativeArray<float3>
+          (VertexCount, Allocator.Temp,
            NativeArrayOptions.UninitializedMemory);
 
-        for (var vi = 0; vi < _resolution; vi++)
+        var vcount = math.min(source.Length, VertexCount);
+
+        // Transfer waveform data to the vertex array.
+        for (var i = 0; i < vcount; i++)
         {
-            var x = (float)vi / _resolution;
-            var i = vi * source.Length / _resolution;
-            buffer[vi] = new Vector3(x, source[i], 0);
+            var x = (float)i / (vcount - 1);
+            vertices[i] = math.float3(x, source[i], 0);
         }
 
-        return buffer;
+        // Fill the rest of the array with the last vertex.
+        var last = (vcount == 0) ? float3.zero : vertices[vcount - 1];
+        for (var i = vcount; i < VertexCount; i++) vertices[i] = last;
+
+        return vertices;
     }
 
     #endregion

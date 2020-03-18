@@ -83,7 +83,7 @@ sealed class LissajousRenderer : MonoBehaviour
 
     #endregion
 
-    #region Line strip mesh operations
+    #region Line mesh operations
 
     Mesh _mesh;
 
@@ -150,7 +150,7 @@ sealed class LissajousRenderer : MonoBehaviour
         }
 
         // Fill the rest of the array with the last vertex.
-        var last = vidx == 0 ? float3.zero : vertices[vidx - 1];
+        var last = (vidx == 0) ? float3.zero : vertices[vidx - 1];
         while (vidx < VertexCount) vertices[vidx++] = last;
 
         return vertices;

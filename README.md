@@ -9,24 +9,26 @@ Demos
 
 ![gif](https://i.imgur.com/L98u4AI.gif)
 
-**Sphere** is the simplest example of LASP. The sphere is scaled by input audio
-using the Audio Level Tracker component.
+**Sphere** is the simplest example of LASP that shows an animated sphere scaled
+by the audio level. It uses the **Audio Level Tracker** component to calculate
+the audio level and a **Property Binder** to animate the scale property of the
+sphere.
 
 ![gif](https://i.imgur.com/4OVS00N.gif)
 
-**LevelMeter** shows how to create audio-reactive behaviors using the
-Audio Level Tracker component. It also uses the raw waveform API to draw the
-waveform graph.
+**LevelMeter** is a slightly advanced example of the use of Audio Level Tracker
+that shows low/mid/high frequency band levels. It also uses the raw waveform
+function to draw the waveform graph.
 
 ![screenshot](https://i.imgur.com/D51PENw.png)
 
-**DeviceSelector** shows how to instantiate Audio Level Tracker and property
-binders dynamically.
+**DeviceSelector** shows how to instantiate Audio Level Tracker and set Property
+Binders programmatically at run time.
 
 ![gif](https://i.imgur.com/gVwN4qE.gif)
 
-**Lissajous** is an example of use of the Input Stream class. It draws a
-Lissajous curve using the interleaved waveform API.
+**Lissajous** is an example that draws a Lissajous curve using the **Input
+Stream** class and its interleaved waveform function.
 
 System Requirements
 -------------------
@@ -88,42 +90,67 @@ After changes, the manifest file should look like below:
 Audio Level Tracker Component
 -----------------------------
 
-**Audio Level Tracker** is a component for receiving audio input and
-controlling other objects by normalized audio level.
+**Audio Level Tracker** is a component that receives an audio stream and
+calculates the current audio level. It supports **Property Binders** that
+modifies properties of external objects based on the normalized audio level.
 
-![gif](https://i.imgur.com/ddCZSs5.gif)
+![gif](https://i.imgur.com/wBsYq64.gif)
 
 It tracks the most recent peak level and calculates the normalized level based
 on the difference between the current level and the peak level. It only outputs
-an effective value when the current level is in its dynamic range, which is
+an effective value when the current level is in its dynamic range that is
 indicated by the gray band in the level meter.
+
+### Default Device / Device ID
+
+As an audio source, you can use the **Default Device** or one of the available
+audio devices by specifying its Device ID.
+
+Device IDs are system-generated random string like `{4786-742f-9e42}`. On
+Editor, you can use the **Select** button to find a device and get its ID. Note
+that those ID strings are system-dependent. You have to reconfigure it when
+running the project on a different platform.
+
+For runtime use, you can use `AudioSystem.InputDevices` to enumerate the
+available devices and get those IDs. Please check the DeviceSelector example for
+further details.
+
+### Channel
+
+Select a channel to use as an input, or stay 0 for monaural devices.
 
 ### Filter Type
 
 Four types of filters are available: **Bypass**, **Low Pass**, **Band Pass**,
 and **High Pass**. These filters are useful to detect a specific type of
 rhythmic accents. For instance, you can use the low pass filter to create a
-behavior that reacts to kick drums or basslines.
+behavior reacting to kick drums or basslines.
 
 ### Dynamic Range (dB)
 
 The **Dynamic Range** specifies the range of audio level normalization. The
 output value becomes zero when the input level is equal to or lower than
-*Peak - Dynamic Range*.
+*Peak Level - Dynamic Range*.
 
 ### Auto Gain
 
 When enabled, it automatically tracks the peak level, as explained above. When
-disabled, it fixes the peak level at 0 dB. In this case, the effective range
-can be manually controlled by the Gain property, which is only visible when
-auto gain is disabled.
+disabled, it fixes the peak level at 0 dB. In this case, you can manually
+control the effective range via the **Gain** property.
 
 ### Smooth Fall
 
 When enabled, the output value gradually falls to the current actual audio
 level. It's useful to make choppy animation smoother.
 
-![gif](https://i.imgur.com/MEojdmD.gif)
+![gif](https://i.imgur.com/VKiZx4M.gif)
+
+Scripting Interface
+-------------------
+
+There are several public methods/properties in LASP classes, such as
+`AudioLevelTracker`, `AudioSystem`, `InputStream`. Please check the example
+scripts for detailed usages.
 
 Known Issue
 -----------

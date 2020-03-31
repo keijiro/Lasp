@@ -36,6 +36,37 @@ namespace Lasp
           GetNativeSlice<T>(this ReadOnlySpan<T> span)
           where T : unmanaged
           => GetNativeSlice(span, 0, 1);
+
+        public unsafe static ReadOnlySpan<T>
+          GetReadOnlySpan<T>(this NativeArray<T> array)
+          where T : unmanaged
+        {
+            var ptr = NativeArrayUnsafeUtility.GetUnsafeReadOnlyPtr(array);
+            return new Span<T>(ptr, array.Length);
+        }
+
+        public unsafe static ReadOnlySpan<T>
+          GetReadOnlySpan<T>(this NativeSlice<T> slice)
+          where T : unmanaged
+        {
+            var ptr = NativeSliceUnsafeUtility.GetUnsafeReadOnlyPtr(slice);
+            return new Span<T>(ptr, slice.Length);
+        }
+    }
+
+    // NativeArray allocation utilities
+    static class TempJobMemory
+    {
+        public static NativeArray<T> New<T>(int size) where T : unmanaged
+          => new NativeArray<T>(size, Allocator.TempJob,
+                                NativeArrayOptions.UninitializedMemory);
+    }
+
+    static class PersistentMemory
+    {
+        public static NativeArray<T> New<T>(int size) where T : unmanaged
+          => new NativeArray<T>(size, Allocator.Persistent,
+                                NativeArrayOptions.UninitializedMemory);
     }
 
     // Extension methods for List<T>

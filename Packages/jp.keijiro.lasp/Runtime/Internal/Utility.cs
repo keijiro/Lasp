@@ -7,7 +7,6 @@ using Unity.Mathematics;
 namespace Lasp
 {
     // Extension methods for NativeArray/NativeSlice <-> ReadOnlySpan conversion
-
     static class SpanNativeArraySliceExtensions
     {
         public unsafe static NativeSlice<T>
@@ -37,40 +36,6 @@ namespace Lasp
           GetNativeSlice<T>(this ReadOnlySpan<T> span)
           where T : unmanaged
           => GetNativeSlice(span, 0, 1);
-
-        public unsafe static ReadOnlySpan<T>
-          GetReadOnlySpan<T>(this NativeArray<T> array)
-          where T : unmanaged
-        {
-            var ptr = NativeArrayUnsafeUtility.GetUnsafeReadOnlyPtr(array);
-            return new Span<T>(ptr, array.Length);
-        }
-
-        public unsafe static ReadOnlySpan<T>
-          GetReadOnlySpan<T>(this NativeSlice<T> slice)
-          where T : unmanaged
-        {
-            var ptr = NativeSliceUnsafeUtility.GetUnsafeReadOnlyPtr(slice);
-            return new Span<T>(ptr, slice.Length);
-        }
-    }
-
-    // Native array utility functions
-    static class NativeArrayUtil
-    {
-        public static NativeArray<T>
-          NewTempJob<T>(T[] source) where T : unmanaged
-            => new NativeArray<T>(source, Allocator.TempJob);
-
-        public static NativeArray<T>
-          NewTempJob<T>(ReadOnlySpan<T> source) where T : unmanaged
-        {
-            var na = new NativeArray<T>
-              (source.Length, Allocator.TempJob,
-               NativeArrayOptions.UninitializedMemory);
-            source.GetNativeSlice().CopyTo(na);
-            return na;
-        }
     }
 
     // Extension methods for List<T>

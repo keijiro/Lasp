@@ -20,32 +20,26 @@ namespace Lasp.Editor
 
             // Spectrum curve
             const float xScale = 0.3f;
-            const float refLevel = 0.7071f;
-            const float epsilon = 1.5849e-13f;
-            const float range = 100;
-
             var Nv = _vertices.Length;
             var Ns = spectrum.Length;
 
-            Handles.color = Color.white;
-
             for (var i = 0; i < Nv; i++)
             {
-                // Log scale (x-axis)
+                // X-axis (log scale)
                 var x = Mathf.Log(xScale * i        + 1) /
                         Mathf.Log(xScale * (Nv - 1) + 1);
 
-                // Log scale (y-axis)
-                var y = spectrum[i * Ns / Nv];
-                y = 20 * Mathf.Log10(y / refLevel + epsilon);
+                // Y-axis (normalized linear scale)
+                var y = Mathf.Clamp01(spectrum[i * Ns / Nv]);
 
                 // Transform the point into the editor rect.
                 x = x * rect.width + rect.xMin;
-                y = rect.yMin - Mathf.Clamp(y / range, -1, 0) * rect.height;
+                y = rect.yMax - y * rect.height;
 
                 _vertices[i] = new Vector3(x, y, 0);
             }
 
+            Handles.color = Color.white;
             Handles.DrawAAPolyLine(_vertices);
         }
     }

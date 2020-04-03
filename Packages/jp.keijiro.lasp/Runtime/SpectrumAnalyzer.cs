@@ -30,10 +30,29 @@ namespace Lasp
           { get => _channel;
             set => _channel = value; }
 
+        // Spectrum resolution
         [SerializeField] int _resolution = 512;
         public int resolution
           { get => _resolution;
             set => _resolution = ValidateResolution(value); }
+
+        // Auto gain control switch
+        [SerializeField] bool _autoGain = true;
+        public bool autoGain
+          { get => _autoGain;
+            set => _autoGain = value; }
+
+        // Manual input gain (only used when auto gain is off)
+        [SerializeField, Range(-10, 40)] float _gain = 6;
+        public float gain
+          { get => _gain;
+            set => _gain = value; }
+
+        // Dynamic range in dB
+        [SerializeField, Range(1, 120)] float _dynamicRange = 60;
+        public float dynamicRange
+          { get => _dynamicRange;
+            set => _dynamicRange = value; }
 
         #endregion
 
@@ -46,14 +65,12 @@ namespace Lasp
             return 1 << (int)math.max(1, math.round(math.log2(x)));
         }
 
-        void OnValidate()
-        {
-            _resolution = ValidateResolution(_resolution);
-        }
-
         #endregion
 
         #region Runtime public properties and methods
+
+        // Current input gain (dB)
+        public float currentGain => _autoGain ? -_head : _gain;
 
         // Spectrum data as NativeArray
         public Unity.Collections.NativeArray<float> SpectrumArray
@@ -63,14 +80,18 @@ namespace Lasp
         public System.ReadOnlySpan<float> SpectrumSpan
           => Fft.Spectrum.GetReadOnlySpan();
 
-        // Raw wave audio data as NativeSlice
-        public Unity.Collections.NativeSlice<float> AudioDataSlice
-          => Stream?.GetChannelDataSlice(channel)
-             ?? default(Unity.Collections.NativeSlice<float>);
+        // Reset the auto gain state.
+        public void ResetAutoGain() => _head = kSilence;
 
         #endregion
 
         #region Private members
+
+        // Silence: Locally defined noise floor level (dBFS)
+        const float kSilence = -240;
+
+        // Nominal level of auto gain (recent maximum level)
+        float _head = kSilence;
 
         // Check the status and try selecting the device.
         void TrySelectDevice(string id)
@@ -113,8 +134,24 @@ namespace Lasp
 
         void Update()
         {
+            var input = Stream?.GetChannelLevel(_channel) ?? kSilence;
+            var dt = Time.deltaTime;
+
+            // Auto gain control
+            if (_autoGain)
+            {
+                // Slowly return to the noise floor.
+                const float kDecaySpeed = 0.6f;
+                _head = Mathf.Max(_head - kDecaySpeed * dt, kSilence);
+
+                // Pull up by input with a small headroom.
+                var room = _dynamicRange * 0.1f;
+                _head = Mathf.Clamp(input - room, _head, 0);
+            }
+
+            // FFT
             _fft?.Push(Stream.GetChannelDataSlice(_channel));
-            _fft?.Analyze();
+            _fft?.Analyze(_head - _dynamicRange, _head);
         }
 
         #endregion

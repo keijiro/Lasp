@@ -90,5 +90,8 @@ namespace Lasp
         // Reference level (full scale sin wave) = 1/sqrt(2)
         public static float dBFS(float p)
           => 20 * math.log10(p / 0.7071f + 1.5849e-13f);
+
+        public static float2 dBFS(float2 p)
+          => 20 * math.log10(p / 0.7071f + 1.5849e-13f);
     }
 }

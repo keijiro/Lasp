@@ -67,7 +67,7 @@ namespace Lasp
         }
 
         // Analyze the input buffer to calculate spectrum data.
-        public void Analyze()
+        public void Analyze(float floor, float head)
         {
             using (var X = TempJobMemory.New<float4>(_N / 2))
             {
@@ -83,7 +83,9 @@ namespace Lasp
 
                 // Postprocess (power spectrum calculation)
                 var O2 = _O.Reinterpret<float2>(sizeof(float));
-                new PostprocessJob { X = X, O = O2, s = 2.0f / _N }.Run(_N / 4);
+                new PostprocessJob
+                  { X = X, O = O2, DivN = 2.0f / _N,
+                    DivR = 1 / (head - floor), F = floor}.Run(_N / 4);
             }
         }
 
@@ -151,11 +153,14 @@ namespace Lasp
 
             var i = 0;
             for (var m = 4; m <= _N; m <<= 1)
+            {
+                var alpha = -2 * math.PI / m;
                 for (var k = 0; k < _N; k += m)
                     for (var j = 0; j < m / 2; j += 2)
                         _T[i++] = new TFactor
                           { I = math.int2((k + j) / 2, (k + j + m / 2) / 2),
-                            W = math.cos(-2 * math.PI / m * math.float2(j, j + 1)) };
+                            W = math.cos(alpha * math.float2(j, j + 1)) };
+            }
         }
 
         #endregion
@@ -212,12 +217,15 @@ namespace Lasp
         {
             [ReadOnly] public NativeArray<float4> X;
             [WriteOnly] public NativeArray<float2> O;
-            public float s;
+            public float DivN;
+            public float DivR;
+            public float F;
 
             public void Execute(int i)
             {
                 var x = X[i];
-                O[i] = math.float2(math.length(x.xy), math.length(x.zw)) * s;
+                var l = math.float2(math.length(x.xy), math.length(x.zw));
+                O[i] = (MathUtils.dBFS(l * DivN) - F) * DivR;
             }
         }
 

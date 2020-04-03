@@ -48,10 +48,13 @@ namespace Lasp.Editor
             using (new EditorGUI.DisabledScope(EditorApplication.isPlaying))
                 _deviceSelector.ShowGUI();
 
-            // Input settings
+            // Channel selection
             EditorGUILayout.PropertyField(_channel);
-            EditorGUILayout
-              .IntPopup(_resolution, _resolutionLabels, _resolutionOptions);
+
+            // Spectrum resolution (disabled during play mode)
+            using (new EditorGUI.DisabledScope(EditorApplication.isPlaying))
+                EditorGUILayout.IntPopup
+                  (_resolution, _resolutionLabels, _resolutionOptions);
 
             // Dynamic range properties
             _dynamicRange.ShowGUI();

@@ -146,7 +146,7 @@ namespace Lasp
                 _head = Mathf.Max(_head, kSilence + _dynamicRange);
 
                 // Pull up by input with a small headroom.
-                var room = _dynamicRange * 0.1f;
+                var room = _dynamicRange * 0.05f;
                 _head = Mathf.Clamp(input - room, _head, 0);
             }
 

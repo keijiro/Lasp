@@ -39,6 +39,8 @@ namespace Lasp.Editor
 
         public override void OnInspectorGUI()
         {
+            var targetComponent = (SpectrumAnalyzer)target;
+
             serializedObject.Update();
 
             // Device selection (disabled during play mode)
@@ -52,7 +54,7 @@ namespace Lasp.Editor
 
             // Spectrum graph
             if (targets.Length == 1 && EditorApplication.isPlaying)
-                SpectrumDrawer.DrawGraph(((SpectrumAnalyzer)target).SpectrumSpan);
+                SpectrumDrawer.DrawGraph(targetComponent.SpectrumArray);
 
             serializedObject.ApplyModifiedProperties();
         }

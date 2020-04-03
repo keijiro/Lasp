@@ -13,6 +13,8 @@ namespace Lasp.Editor
     {
         public static void DrawGraph(NativeArray<float> spectrum)
         {
+            EditorGUILayout.Space();
+
             var rect = GUILayoutUtility.GetRect(128, 64);
 
             // Spectrum curve construction

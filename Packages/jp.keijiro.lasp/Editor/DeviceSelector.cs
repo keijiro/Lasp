@@ -4,6 +4,9 @@ using UnityEditor;
 
 namespace Lasp.Editor
 {
+    //
+    // Utility class for presenting the device selector dropdown
+    //
     sealed class DeviceSelector
     {
         #region Public members

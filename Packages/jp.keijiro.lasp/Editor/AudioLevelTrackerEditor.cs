@@ -13,24 +13,12 @@ namespace Lasp.Editor
 
         SerializedProperty _channel;
         SerializedProperty _filterType;
-        SerializedProperty _dynamicRange;
-        SerializedProperty _autoGain;
-        SerializedProperty _gain;
         SerializedProperty _smoothFall;
         SerializedProperty _fallSpeed;
 
         DeviceSelector _deviceSelector;
+        DynamicRangeEditor _dynamicRange;
         PropertyBinderEditor _propertyBinderEditor;
-
-        #endregion
-
-        #region Labels
-
-        static class Styles
-        {
-            public static Label DynamicRange = "Dynamic Range (dB)";
-            public static Label Gain         = "Gain (dB)";
-        }
 
         #endregion
 
@@ -42,13 +30,11 @@ namespace Lasp.Editor
 
             _channel      = finder["_channel"];
             _filterType   = finder["_filterType"];
-            _dynamicRange = finder["_dynamicRange"];
-            _autoGain     = finder["_autoGain"];
-            _gain         = finder["_gain"];
             _smoothFall   = finder["_smoothFall"];
             _fallSpeed    = finder["_fallSpeed"];
 
             _deviceSelector = new DeviceSelector(serializedObject);
+            _dynamicRange = new DynamicRangeEditor(serializedObject);
             _propertyBinderEditor
               = new PropertyBinderEditor(finder["_propertyBinders"]);
         }
@@ -70,18 +56,7 @@ namespace Lasp.Editor
             // Input settings
             EditorGUILayout.PropertyField(_channel);
             EditorGUILayout.PropertyField(_filterType);
-            EditorGUILayout.PropertyField(_dynamicRange, Styles.DynamicRange);
-            EditorGUILayout.PropertyField(_autoGain);
-
-            // Show Gain when no peak tracking.
-            if (_autoGain.hasMultipleDifferentValues ||
-                !_autoGain.boolValue)
-            {
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(_gain, Styles.Gain);
-                EditorGUI.indentLevel--;
-            }
-
+            _dynamicRange.ShowGUI();
             EditorGUILayout.PropertyField(_smoothFall);
 
             // Show Fall Speed when Smooth Fall is on.
@@ -100,13 +75,8 @@ namespace Lasp.Editor
                 LevelMeterDrawer.DrawMeter((AudioLevelTracker)target);
             }
 
-            // Show Reset Peak Level button during play mode.
-            if (EditorApplication.isPlaying)
-            {
-                EditorGUILayout.Space();
-                if (UnityEngine.GUILayout.Button("Reset Auto Gain"))
-                    foreach (AudioLevelTracker t in targets) t.ResetAutoGain();
-            }
+            // Reset peak button
+            _dynamicRange.ShowResetPeakButton(targets);
 
             serializedObject.ApplyModifiedProperties();
 

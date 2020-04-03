@@ -43,13 +43,13 @@ namespace Lasp
             set => _autoGain = value; }
 
         // Manual input gain (only used when auto gain is off)
-        [SerializeField, Range(-10, 40)] float _gain = 6;
+        [SerializeField, Range(-10, 120)] float _gain = 0;
         public float gain
           { get => _gain;
             set => _gain = value; }
 
         // Dynamic range in dB
-        [SerializeField, Range(1, 120)] float _dynamicRange = 60;
+        [SerializeField, Range(1, 120)] float _dynamicRange = 80;
         public float dynamicRange
           { get => _dynamicRange;
             set => _dynamicRange = value; }
@@ -142,7 +142,8 @@ namespace Lasp
             {
                 // Slowly return to the noise floor.
                 const float kDecaySpeed = 0.6f;
-                _head = Mathf.Max(_head - kDecaySpeed * dt, kSilence);
+                _head -= kDecaySpeed * dt;
+                _head = Mathf.Max(_head, kSilence + _dynamicRange);
 
                 // Pull up by input with a small headroom.
                 var room = _dynamicRange * 0.1f;
@@ -151,7 +152,7 @@ namespace Lasp
 
             // FFT
             _fft?.Push(Stream.GetChannelDataSlice(_channel));
-            _fft?.Analyze(_head - _dynamicRange, _head);
+            _fft?.Analyze(-currentGain - _dynamicRange, -currentGain);
         }
 
         #endregion

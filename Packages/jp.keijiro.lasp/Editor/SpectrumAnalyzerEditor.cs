@@ -12,8 +12,8 @@ namespace Lasp.Editor
     {
         SerializedProperty _channel;
         SerializedProperty _resolution;
-
         DeviceSelector _deviceSelector;
+        DynamicRangeEditor _dynamicRange;
 
         static GUIContent [] _resolutionLabels = {
             new GUIContent("256"), new GUIContent("512"),
@@ -35,6 +35,7 @@ namespace Lasp.Editor
             _resolution = finder["_resolution"];
 
             _deviceSelector = new DeviceSelector(serializedObject);
+            _dynamicRange = new DynamicRangeEditor(serializedObject);
         }
 
         public override void OnInspectorGUI()
@@ -52,9 +53,15 @@ namespace Lasp.Editor
             EditorGUILayout
               .IntPopup(_resolution, _resolutionLabels, _resolutionOptions);
 
+            // Dynamic range properties
+            _dynamicRange.ShowGUI();
+
             // Spectrum graph
             if (targets.Length == 1 && EditorApplication.isPlaying)
                 SpectrumDrawer.DrawGraph(targetComponent.SpectrumArray);
+
+            // Reset peak button
+            _dynamicRange.ShowResetPeakButton(targets);
 
             serializedObject.ApplyModifiedProperties();
         }

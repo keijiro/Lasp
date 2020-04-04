@@ -25,7 +25,9 @@ namespace Lasp.Editor
 
                 // Construction job on the main thread.
                 new SpectrumCurveConstructionJob
-                  { Input = spectrum, Output = packed, Rect = rect }
+                  { Input = spectrum, Output = packed, Rect = rect,
+                    Log2Ni = math.log2(spectrum.Length),
+                    DivNo = 1.0f / packed.Length }
                   .Run(_vertices.Length / 4);
 
                 // Job result retrieval
@@ -55,19 +57,17 @@ namespace Lasp.Editor
         {
             [ReadOnly] public NativeArray<float> Input;
             [WriteOnly] public NativeArray<float3x4> Output;
+
             public Rect Rect;
+            public float Log2Ni, DivNo;
 
             public void Execute(int i)
             {
-                const float xScale = 0.3f;
                 var offsets = math.float4(0, 1, 2, 3) / 4;
 
-                var N_i = Input.Length - 1;
-                var N_o = Output.Length;
-
                 // Log scale by inverse projection
-                var x = (offsets + i) / N_o;
-                var p = (math.pow(xScale * N_i + 1, x) - 1) / xScale;
+                var x = (offsets + i) * DivNo;
+                var p = math.pow(2, math.lerp(0.1f, 1, x) * Log2Ni);
                 var y = math.saturate(SmoothSample(p));
 
                 // Transform the point into the editor rect.

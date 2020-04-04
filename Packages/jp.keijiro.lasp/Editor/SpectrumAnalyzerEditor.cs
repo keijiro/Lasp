@@ -16,8 +16,9 @@ namespace Lasp.Editor
         DynamicRangeEditor _dynamicRange;
 
         static GUIContent [] _resolutionLabels = {
-            new GUIContent("256"), new GUIContent("512"),
-            new GUIContent("1024"), new GUIContent("2048")
+            new GUIContent("128"), new GUIContent("256"),
+            new GUIContent("512"), new GUIContent("1024"),
+            new GUIContent("2048")
         };
 
         static int [] _resolutionOptions = { 128, 256, 512, 1024, 2048 };

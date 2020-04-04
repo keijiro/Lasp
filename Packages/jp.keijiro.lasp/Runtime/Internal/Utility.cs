@@ -36,6 +36,37 @@ namespace Lasp
           GetNativeSlice<T>(this ReadOnlySpan<T> span)
           where T : unmanaged
           => GetNativeSlice(span, 0, 1);
+
+        public unsafe static ReadOnlySpan<T>
+          GetReadOnlySpan<T>(this NativeArray<T> array)
+          where T : unmanaged
+        {
+            var ptr = NativeArrayUnsafeUtility.GetUnsafeReadOnlyPtr(array);
+            return new Span<T>(ptr, array.Length);
+        }
+
+        public unsafe static ReadOnlySpan<T>
+          GetReadOnlySpan<T>(this NativeSlice<T> slice)
+          where T : unmanaged
+        {
+            var ptr = NativeSliceUnsafeUtility.GetUnsafeReadOnlyPtr(slice);
+            return new Span<T>(ptr, slice.Length);
+        }
+    }
+
+    // NativeArray allocation utilities
+    static class TempJobMemory
+    {
+        public static NativeArray<T> New<T>(int size) where T : unmanaged
+          => new NativeArray<T>(size, Allocator.TempJob,
+                                NativeArrayOptions.UninitializedMemory);
+    }
+
+    static class PersistentMemory
+    {
+        public static NativeArray<T> New<T>(int size) where T : unmanaged
+          => new NativeArray<T>(size, Allocator.Persistent,
+                                NativeArrayOptions.UninitializedMemory);
     }
 
     // Extension methods for List<T>
@@ -58,6 +89,9 @@ namespace Lasp
         // Decibel (full scale) calculation
         // Reference level (full scale sin wave) = 1/sqrt(2)
         public static float dBFS(float p)
+          => 20 * math.log10(p / 0.7071f + 1.5849e-13f);
+
+        public static float2 dBFS(float2 p)
           => 20 * math.log10(p / 0.7071f + 1.5849e-13f);
     }
 }

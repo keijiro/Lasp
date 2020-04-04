@@ -73,20 +73,20 @@ namespace Lasp
         public float currentGain => _autoGain ? -_head : _gain;
 
         // Spectrum data as NativeArray
-        public Unity.Collections.NativeArray<float> SpectrumArray
+        public Unity.Collections.NativeArray<float> spectrumArray
           => Fft.Spectrum;
 
         // X-axis log scaled spectrum data as NativeArray
-        public Unity.Collections.NativeArray<float> LogSpectrumArray
+        public Unity.Collections.NativeArray<float> logSpectrumArray
           => LogScaler.Resample(Fft.Spectrum);
 
         // Spectrum data as ReadOnlySpan
-        public System.ReadOnlySpan<float> SpectrumSpan
+        public System.ReadOnlySpan<float> spectrumSpan
           => Fft.Spectrum.GetReadOnlySpan();
 
         // X-axis log scaled spectrum data as ReadOnlySpan
-        public System.ReadOnlySpan<float> LogSpectrumSpan
-          => LogSpectrumArray.GetReadOnlySpan();
+        public System.ReadOnlySpan<float> logSpectrumSpan
+          => logSpectrumArray.GetReadOnlySpan();
 
         // Reset the auto gain state.
         public void ResetAutoGain() => _head = kSilence;

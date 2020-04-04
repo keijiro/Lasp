@@ -62,7 +62,7 @@ namespace Lasp.Editor
 
             // Spectrum graph
             if (targets.Length == 1 && EditorApplication.isPlaying)
-                SpectrumDrawer.DrawGraph(targetComponent.LogSpectrumSpan);
+                SpectrumDrawer.DrawGraph(targetComponent.logSpectrumSpan);
 
             // Reset peak button
             _dynamicRange.ShowResetPeakButton(targets);

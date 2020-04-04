@@ -86,7 +86,7 @@ namespace Lasp
         public float normalizedLevel => _normalizedLevel;
 
         // Raw wave audio data as NativeSlice
-        public Unity.Collections.NativeSlice<float> AudioDataSlice
+        public Unity.Collections.NativeSlice<float> audioDataSlice
           => Stream?.GetChannelDataSlice(channel)
              ?? default(Unity.Collections.NativeSlice<float>);
 

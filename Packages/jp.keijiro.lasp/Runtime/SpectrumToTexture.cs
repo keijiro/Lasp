@@ -18,17 +18,17 @@ namespace Lasp
             [SerializeField] string _propertyName;
             [SerializeField] int _propertyID;
 
-            public Renderer renderer {
+            public Renderer Renderer {
                 get => _renderer;
                 set => _renderer = value;
             }
 
-            public string propertyName {
+            public string PropertyName {
                 get => _propertyName;
                 set => SetPropertyName(value);
             }
 
-            public int propertyID => _propertyID;
+            public int PropertyID => _propertyID;
 
             void SetPropertyName(string name)
             {
@@ -98,9 +98,9 @@ namespace Lasp
 
             // Texture update
             if (_logScale)
-                _texture.LoadRawTextureData(_analyzer.LogSpectrumArray);
+                _texture.LoadRawTextureData(_analyzer.logSpectrumArray);
             else
-                _texture.LoadRawTextureData(_analyzer.SpectrumArray);
+                _texture.LoadRawTextureData(_analyzer.spectrumArray);
 
             _texture.Apply();
 
@@ -114,9 +114,9 @@ namespace Lasp
             // Apply the material overrides.
             foreach (var o in _overrideList)
             {
-                o.renderer.GetPropertyBlock(_block);
-                _block.SetTexture(o.propertyID, _texture);
-                o.renderer.SetPropertyBlock(_block);
+                o.Renderer.GetPropertyBlock(_block);
+                _block.SetTexture(o.PropertyID, _texture);
+                o.Renderer.SetPropertyBlock(_block);
             }
         }
 

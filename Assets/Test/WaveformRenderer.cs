@@ -9,7 +9,7 @@ using UnityEngine.Rendering;
 //
 // There are two approaches to retrieve raw waveforms from LASP.
 //
-// - AudioLevelTracker.AudioDataSlice: This property returns a strided native
+// - AudioLevelTracker.audioDataSlice: This property returns a strided native
 //   slice that represents a raw waveform received at a specified channel of a
 //   specified device. The length of the slice is the same as the duration of
 //   the last frame, so you can continuously retrieve waveform data every frame
@@ -47,7 +47,7 @@ sealed class WaveformRenderer : MonoBehaviour
         // Retrieve waveform data as a channel-strided data slice and then
         // update the line mesh with it.
         //
-        UpdateMesh(_input.AudioDataSlice);
+        UpdateMesh(_input.audioDataSlice);
 
         // Draw the line mesh.
         Graphics.DrawMesh

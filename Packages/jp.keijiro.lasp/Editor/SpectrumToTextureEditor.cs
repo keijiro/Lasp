@@ -12,6 +12,7 @@ namespace Lasp.Editor
     {
         #region Inspector implementation
 
+        SerializedProperty _logScale;
         SerializedProperty _renderTexture;
         ReorderableList _overrideList;
 
@@ -19,6 +20,7 @@ namespace Lasp.Editor
         {
             var finder = new PropertyFinder(serializedObject);
 
+            _logScale = finder["_logScale"];
             _renderTexture = finder["_renderTexture"];
 
             _overrideList = new ReorderableList
@@ -32,6 +34,7 @@ namespace Lasp.Editor
         {
             serializedObject.Update();
 
+            EditorGUILayout.PropertyField(_logScale);
             EditorGUILayout.PropertyField(_renderTexture);
             EditorGUILayout.Space();
             _overrideList.DoLayoutList();

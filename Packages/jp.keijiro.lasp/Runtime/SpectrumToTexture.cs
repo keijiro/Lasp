@@ -41,6 +41,13 @@ namespace Lasp
 
         #region Editable attributes
 
+        // X-axis log scale switch
+        [SerializeField] bool _logScale = true;
+        public bool logScale {
+            get => _logScale;
+            set => _logScale = value;
+        }
+
         // Bake target render texture
         [SerializeField] RenderTexture _renderTexture = null;
         public RenderTexture renderTexture {
@@ -90,7 +97,11 @@ namespace Lasp
                                          TextureFormat.RFloat, false);
 
             // Texture update
-            _texture.LoadRawTextureData(_analyzer.SpectrumArray);
+            if (_logScale)
+                _texture.LoadRawTextureData(_analyzer.LogSpectrumArray);
+            else
+                _texture.LoadRawTextureData(_analyzer.SpectrumArray);
+
             _texture.Apply();
 
             // Update the external render texture.

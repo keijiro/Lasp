@@ -76,9 +76,17 @@ namespace Lasp
         public Unity.Collections.NativeArray<float> SpectrumArray
           => Fft.Spectrum;
 
+        // X-axis log scaled spectrum data as NativeArray
+        public Unity.Collections.NativeArray<float> LogSpectrumArray
+          => LogScaler.Resample(Fft.Spectrum);
+
         // Spectrum data as ReadOnlySpan
         public System.ReadOnlySpan<float> SpectrumSpan
           => Fft.Spectrum.GetReadOnlySpan();
+
+        // X-axis log scaled spectrum data as ReadOnlySpan
+        public System.ReadOnlySpan<float> LogSpectrumSpan
+          => LogSpectrumArray.GetReadOnlySpan();
 
         // Reset the auto gain state.
         public void ResetAutoGain() => _head = kSilence;
@@ -119,8 +127,11 @@ namespace Lasp
 
         // FFT buffer object with lazy initialization
         FftBuffer Fft => _fft ?? (_fft = new FftBuffer(_resolution * 2));
-
         FftBuffer _fft;
+
+        // Log scale resampler with lazy initialization
+        LogScaler LogScaler => _logScaler ?? (_logScaler = new LogScaler());
+        LogScaler _logScaler;
 
         #endregion
 
@@ -130,6 +141,9 @@ namespace Lasp
         {
             _fft?.Dispose();
             _fft = null;
+
+            _logScaler?.Dispose();
+            _logScaler = null;
         }
 
         void Update()

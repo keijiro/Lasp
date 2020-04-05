@@ -68,7 +68,7 @@ To the `scopedRegistries` section:
 To the `dependencies` section:
 
 ```
-"jp.keijiro.lasp": "2.0.0"
+"jp.keijiro.lasp": "2.1.0"
 ```
 
 After changes, the manifest file should look like below:
@@ -88,7 +88,7 @@ After changes, the manifest file should look like below:
     }
   ],
   "dependencies": {
-    "jp.keijiro.lasp": "2.0.0",
+    "jp.keijiro.lasp": "2.1.0",
 ...
 ```
 

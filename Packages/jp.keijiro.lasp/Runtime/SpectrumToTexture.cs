@@ -64,6 +64,13 @@ namespace Lasp
 
         #endregion
 
+        #region Runtime public property
+
+        // Baked spectrum texture
+        public Texture texture => _texture;
+
+        #endregion
+
         #region Private members
 
         SpectrumAnalyzer _analyzer;

@@ -30,6 +30,11 @@ Binders programmatically at run time.
 **Lissajous** is an example that draws a Lissajous curve using the **Input
 Stream** class and its interleaved waveform function.
 
+![gif](https://i.imgur.com/jT0Tj1o.gif)
+
+**Spectrum** is an example showing how to use the **Spectrum Analyzer**
+component to get the audio frequency spectrum of an input stream.
+
 System Requirements
 -------------------
 
@@ -144,6 +149,46 @@ When enabled, the output value gradually falls to the current actual audio
 level. It's useful to make choppy animation smoother.
 
 ![gif](https://i.imgur.com/VKiZx4M.gif)
+
+Spectrum Analyzer Component
+---------------------------
+
+![gif](https://i.imgur.com/sWRMSMG.gif)
+
+**Spectrum Analyzer** is a component that receives an audio stream and applies
+the FFT (Fast Fourier Transform) to get the spectrum data.
+
+It normalizes the spectrum values by using the same algorithm as Audio Level
+Tracker. Please see the section above for details.
+
+You can retrieve the spectrum data using the scripting API. Please see the
+SpectrumAnalyzer example for detailed usage.
+
+Spectrum To Texture Component
+-----------------------------
+
+![screenshot](https://i.imgur.com/r9kxPF3.png)
+
+Spectrum To Texture is a utility component that converts spectrum data into a
+texture that is useful for creating visual effects using shaders.
+
+There are two methods to use the spectrum texture.
+
+### Via Render Texture
+
+You can bake the spectrum data into a render texture by specifying it in the
+Render Texture property. The render texture must follow the following
+requirements:
+
+- Width: Must be the same as the spectrum resolution.
+- Height: Must be 1.
+- Format: R32_SFloat
+
+### Via Material Override
+
+You can override a texture property of a material using the Material Override
+property, which is convenient when using the spectrum texture with Mesh
+Renderer.
 
 Scripting Interface
 -------------------

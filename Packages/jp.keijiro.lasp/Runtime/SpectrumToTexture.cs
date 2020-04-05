@@ -101,7 +101,8 @@ namespace Lasp
             // Lazy initialization of the temporary texture
             if (_texture == null)
                 _texture = new Texture2D(_analyzer.resolution, 1,
-                                         TextureFormat.RFloat, false);
+                                         TextureFormat.RFloat, false)
+                           { wrapMode = TextureWrapMode.Clamp };
 
             // Texture update
             if (_logScale)

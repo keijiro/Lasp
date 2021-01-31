@@ -92,6 +92,10 @@ After changes, the manifest file should look like below:
 ...
 ```
 
+Lasp should then appear in the Package Manager, in the "Packages: In Project" section:
+
+![package manager screenshot](https://i.imgur.com/qKV38sX.png)
+
 Audio Level Tracker Component
 -----------------------------
 

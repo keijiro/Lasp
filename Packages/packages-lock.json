@@ -1,17 +1,17 @@
 {
   "dependencies": {
     "com.unity.burst": {
-      "version": "1.2.3",
+      "version": "1.4.4",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.mathematics": "1.1.0"
+        "com.unity.mathematics": "1.2.1"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.mathematics": {
-      "version": "1.1.0",
-      "depth": 1,
+      "version": "1.2.1",
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -21,7 +21,8 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.modules.ui": "1.0.0"
+        "com.unity.modules.ui": "1.0.0",
+        "com.unity.modules.imgui": "1.0.0"
       }
     },
     "jp.keijiro.lasp": {
@@ -29,8 +30,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.burst": "1.2.3",
-        "com.unity.mathematics": "1.1.0",
+        "com.unity.burst": "1.4.4",
         "jp.keijiro.libsoundio": "1.0.1"
       }
     },

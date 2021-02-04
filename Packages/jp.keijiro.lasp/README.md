@@ -38,7 +38,7 @@ component to get the audio frequency spectrum of an input stream.
 System Requirements
 -------------------
 
-- Unity 2019.3 or later
+- Unity 2019.4 or later
 
 At the moment, LASP only supports desktop platforms (Windows, macOS, and Linux).
 
@@ -68,7 +68,7 @@ To the `scopedRegistries` section:
 To the `dependencies` section:
 
 ```
-"jp.keijiro.lasp": "2.1.2"
+"jp.keijiro.lasp": "2.1.3"
 ```
 
 After changes, the manifest file should look like below:
@@ -88,7 +88,7 @@ After changes, the manifest file should look like below:
     }
   ],
   "dependencies": {
-    "jp.keijiro.lasp": "2.1.2",
+    "jp.keijiro.lasp": "2.1.3",
 ...
 ```
 

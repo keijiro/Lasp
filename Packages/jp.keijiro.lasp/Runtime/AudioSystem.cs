@@ -75,9 +75,26 @@ namespace Lasp
 
                 // Install the Player Loop System.
                 InsertPlayerLoopSystem();
+
+                // Install the "on-exit" callback.
+            #if UNITY_EDITOR
+                UnityEditor.AssemblyReloadEvents.beforeAssemblyReload += OnExit;
+                UnityEditor.EditorApplication.quitting += OnExit;
+            #else
+                UnityEngine.Application.quitting += OnExit;
+            #endif
             }
 
             return _context;
+        }
+
+        static void OnExit()
+        {
+            _inputDeviceList?.Dispose();
+            _inputDeviceList = null;
+
+            _context?.Dispose();
+            _context = null;
         }
 
         #endregion

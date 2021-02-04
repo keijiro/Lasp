@@ -6,7 +6,7 @@ namespace Lasp
     //
     // A collection class used for enumerating available input devices
     //
-    sealed class InputDeviceList : IEnumerable<InputDeviceHandle>
+    sealed class InputDeviceList : IEnumerable<InputDeviceHandle>, System.IDisposable
     {
         #region IEnumerable implementation
 
@@ -15,6 +15,17 @@ namespace Lasp
 
         IEnumerator IEnumerable.GetEnumerator()
           => _list.GetEnumerator();
+
+        #endregion
+
+        #region IDisposable implementation
+
+        public void Dispose()
+        {
+            if (_list == null) return;
+            foreach (var h in _list) h.Dispose();
+            _list = null;
+        }
 
         #endregion
 

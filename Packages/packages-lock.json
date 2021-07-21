@@ -31,11 +31,11 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.burst": "1.4.4",
-        "jp.keijiro.libsoundio": "1.0.1"
+        "jp.keijiro.libsoundio": "1.0.2"
       }
     },
     "jp.keijiro.libsoundio": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {

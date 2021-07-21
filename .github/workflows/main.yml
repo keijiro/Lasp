@@ -1,0 +1,16 @@
+name: UPM on npsjs.com
+on:
+  release:
+    types: [created]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish
+      working-directory: Packages/jp.keijiro.lasp
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

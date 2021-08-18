@@ -16,7 +16,6 @@ namespace Lasp
         {
             [SerializeField] Renderer _renderer;
             [SerializeField] string _propertyName;
-            [SerializeField] int _propertyID;
 
             public Renderer Renderer {
                 get => _renderer;
@@ -25,16 +24,10 @@ namespace Lasp
 
             public string PropertyName {
                 get => _propertyName;
-                set => SetPropertyName(value);
+                set => _propertyName = value;
             }
 
-            public int PropertyID => _propertyID;
-
-            void SetPropertyName(string name)
-            {
-                _propertyName = name;
-                _propertyID = Shader.PropertyToID(name);
-            }
+            public int PropertyID => Shader.PropertyToID(_propertyName);
         }
 
         #endregion

@@ -10,8 +10,18 @@ namespace Lasp.Editor
     {
         static Vector3[] _vertices = new Vector3[160];
 
+        #if UNITY_2021_2_OR_NEWER
+        // To avoid issue 1358691 (compilation error with ReadOnlySpan),
+        // we copy the ReadOnlySpan to a temporary span before accessing.
+        static float[] _temp = new float[4096];
+        public static void DrawGraph(System.ReadOnlySpan<float> spectrum_ro)
+        {
+            var spectrum = new System.Span<float>(_temp, 0, spectrum_ro.Length);
+            spectrum_ro.CopyTo(spectrum);
+        #else
         public static void DrawGraph(System.ReadOnlySpan<float> spectrum)
         {
+        #endif
             EditorGUILayout.Space();
 
             // Graph area

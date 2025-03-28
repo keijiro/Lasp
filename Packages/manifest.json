@@ -1,13 +1,6 @@
 {
   "scopedRegistries": [
     {
-      "name": "Unity NuGet",
-      "url": "https://unitynuget-registry.azurewebsites.net",
-      "scopes": [
-        "org.nuget"
-      ]
-    },
-    {
       "name": "Keijiro",
       "url": "https://registry.npmjs.com",
       "scopes": [
@@ -16,8 +9,6 @@
     }
   ],
   "dependencies": {
-    "org.nuget.system.memory": "4.5.3",
-    "com.unity.ugui": "1.0.0",
-    "com.unity.modules.uielements": "1.0.0"
+    "com.unity.ugui": "2.0.0"
   }
 }

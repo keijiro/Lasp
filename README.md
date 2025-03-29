@@ -1,253 +1,152 @@
-LASP
-====
+# LASP
 
-**LASP** is a Unity plugin providing low-latency audio input features that are
-useful to create audio-reactive visuals.
+**LASP** is a Unity plugin that provides low-latency audio input features,
+making it useful for creating audio-reactive visuals.
 
-Demos
------
+## Demos
 
 ![gif](https://i.imgur.com/L98u4AI.gif)
 
-**Sphere** is the simplest example of LASP that shows an animated sphere scaled
-by the audio level. It uses the **Audio Level Tracker** component to calculate
-the audio level and a **Property Binder** to animate the scale property of the
-sphere.
+**Sphere** is the simplest example demonstrating LASP. It features an animated
+sphere whose scale responds to the audio level. This example utilizes the
+**Audio Level Tracker** component to measure the audio level and a **Property
+Binder** to animate the sphere's scale property.
 
 ![gif](https://i.imgur.com/4OVS00N.gif)
 
-**LevelMeter** is a slightly advanced example of the use of Audio Level Tracker
-that shows low/mid/high frequency band levels. It also uses the raw waveform
-function to draw the waveform graph.
+**LevelMeter** is a slightly more advanced example of the **Audio Level
+Tracker** in action. It visualizes the audio levels of low, mid, and high
+frequency bands. Additionally, it makes use of the raw waveform function to
+render a waveform graph.
 
 ![screenshot](https://i.imgur.com/D51PENw.png)
 
-**DeviceSelector** shows how to instantiate Audio Level Tracker and set Property
-Binders programmatically at run time.
+**DeviceSelector** demonstrates how to instantiate the **Audio Level Tracker**
+and configure **Property Binders** programmatically at runtime.
 
 ![gif](https://i.imgur.com/gVwN4qE.gif)
 
-**Lissajous** is an example that draws a Lissajous curve using the **Input
+**Lissajous** showcases how to draw a Lissajous curve using the **Input
 Stream** class and its interleaved waveform function.
 
 ![gif](https://i.imgur.com/jT0Tj1o.gif)
 
-**Spectrum** is an example showing how to use the **Spectrum Analyzer**
-component to get the audio frequency spectrum of an input stream.
+**Spectrum** illustrates how to utilize the **Spectrum Analyzer** component to
+extract and visualize the frequency spectrum of an audio input stream.
 
-System Requirements
--------------------
+## System Requirements
 
-- Unity 2019.4 or later
+- Unity 2022.3 LTS or later
 
-At the moment, LASP only supports desktop platforms (Windows, macOS, and Linux).
+Currently, LASP supports only desktop platforms (Windows, macOS, and Linux).
 
-How To Install
---------------
+## Installation
 
-This package uses the [scoped registry] feature to resolve package
-dependencies. Please add the following lines to the manifest file
-(`Packages/manifest.json`).
+You can install the LASP package (`jp.keijiro.lasp`) via the "Keijiro" scoped
+registry using the Unity Package Manager. To add the registry to your project,
+follow [these instructions].
 
-[scoped registry]: https://docs.unity3d.com/Manual/upm-scoped.html
+[these instructions]:
+  https://gist.github.com/keijiro/f8c7e8ff29bfe63d86b888901b82644c
 
-<details>
-<summary>.NET Standard 2.0 (Unity 2021.1 or earlier)</summary>
+## Audio Level Tracker Component
 
-To the `scopedRegistries` section:
-
-```
-{
-  "name": "Unity NuGet",
-  "url": "https://unitynuget-registry.azurewebsites.net",
-  "scopes": [ "org.nuget" ]
-},
-{
-  "name": "Keijiro",
-  "url": "https://registry.npmjs.com",
-  "scopes": [ "jp.keijiro" ]
-}
-```
-
-To the `dependencies` section:
-
-```
-"org.nuget.system.memory": "4.5.3",
-"jp.keijiro.lasp": "2.1.6"
-```
-
-After the changes, the manifest file should look like:
-
-```
-{
-  "scopedRegistries": [
-    {
-      "name": "Unity NuGet",
-      "url": "https://unitynuget-registry.azurewebsites.net",
-      "scopes": [ "org.nuget" ]
-    },
-    {
-      "name": "Keijiro",
-      "url": "https://registry.npmjs.com",
-      "scopes": [ "jp.keijiro" ]
-    }
-  ],
-  "dependencies": {
-    "org.nuget.system.memory": "4.5.3",
-    "jp.keijiro.lasp": "2.1.6",
-    ...
-```
-</details>
-
-<details>
-<summary>.NET Standard 2.1 (Unity 2021.2 or later)</summary>
-
-To the `scopedRegistries` section:
-
-```
-{
-  "name": "Keijiro",
-  "url": "https://registry.npmjs.com",
-  "scopes": [ "jp.keijiro" ]
-}
-```
-
-To the `dependencies` section:
-
-```
-"jp.keijiro.lasp": "2.1.6"
-```
-
-After the changes, the manifest file should look like:
-
-```
-{
-  "scopedRegistries": [
-    {
-      "name": "Keijiro",
-      "url": "https://registry.npmjs.com",
-      "scopes": [ "jp.keijiro" ]
-    }
-  ],
-  "dependencies": {
-    "jp.keijiro.lasp": "2.1.6",
-    ...
-```
-</details>
-
-Audio Level Tracker Component
------------------------------
-
-**Audio Level Tracker** is a component that receives an audio stream and
-calculates the current audio level. It supports **Property Binders** that
-modifies properties of external objects based on the normalized audio level.
+The **Audio Level Tracker** component receives an audio stream and calculates
+the current audio level. It supports **Property Binders**, which modify the
+properties of external objects based on the normalized audio level.
 
 ![gif](https://i.imgur.com/wBsYq64.gif)
 
-It tracks the most recent peak level and calculates the normalized level based
-on the difference between the current level and the peak level. It only outputs
-an effective value when the current level is in its dynamic range that is
-indicated by the gray band in the level meter.
+This component tracks the most recent peak level and calculates the normalized
+level based on the difference between the current level and the peak level. It
+only outputs an effective value when the current level falls within its dynamic
+range, indicated by the gray band in the level meter.
 
 ### Default Device / Device ID
 
-As an audio source, you can use the **Default Device** or one of the available
-audio devices by specifying its Device ID.
+As an audio source, you can use either the **Default Device** or a specific
+audio device by specifying its Device ID.
 
-Device IDs are system-generated random string like `{4786-742f-9e42}`. On
-Editor, you can use the **Select** button to find a device and get its ID. Note
-that those ID strings are system-dependent. You have to reconfigure it when
-running the project on a different platform.
+Device IDs are system-generated random strings, such as `{4786-742f-9e42}`. In
+the Editor, you can use the **Select** button to find a device and retrieve its
+ID. Note that these ID strings are system-dependent, so you will need to
+reconfigure them when running the project on a different platform.
 
-For runtime use, you can use `AudioSystem.InputDevices` to enumerate the
-available devices and get those IDs. Please check the DeviceSelector example for
-further details.
+At runtime, you can use `AudioSystem.InputDevices` to enumerate available
+devices and obtain their IDs. Refer to the **DeviceSelector** example for more
+details.
 
 ### Channel
 
-Select a channel to use as an input, or stay 0 for monaural devices.
+Select a channel to use as input, or leave it at `0` for monaural devices.
 
 ### Filter Type
 
-Four types of filters are available: **Bypass**, **Low Pass**, **Band Pass**,
-and **High Pass**. These filters are useful to detect a specific type of
-rhythmic accents. For instance, you can use the low pass filter to create a
-behavior reacting to kick drums or basslines.
+Four filter types are available: **Bypass**, **Low Pass**, **Band Pass**, and
+**High Pass**. These filters are useful for detecting specific rhythmic accents.
+For example, a **Low Pass** filter can be used to create a response to kick
+drums or basslines.
 
 ### Dynamic Range (dB)
 
-The **Dynamic Range** specifies the range of audio level normalization. The
-output value becomes zero when the input level is equal to or lower than
+The **Dynamic Range** defines the range of audio level normalization. The output
+value becomes zero when the input level is equal to or lower than  
 *Peak Level - Dynamic Range*.
 
 ### Auto Gain
 
-When enabled, it automatically tracks the peak level, as explained above. When
-disabled, it fixes the peak level at 0 dB. In this case, you can manually
-control the effective range via the **Gain** property.
+When enabled, this feature automatically tracks the peak level as explained
+above. When disabled, the peak level is fixed at **0 dB**, allowing you to
+manually control the effective range using the **Gain** property.
 
 ### Smooth Fall
 
-When enabled, the output value gradually falls to the current actual audio
-level. It's useful to make choppy animation smoother.
+When enabled, the output value gradually decreases toward the current actual
+audio level, making choppy animations appear smoother.
 
 ![gif](https://i.imgur.com/VKiZx4M.gif)
 
-Spectrum Analyzer Component
----------------------------
+## Spectrum Analyzer Component
 
 ![gif](https://i.imgur.com/sWRMSMG.gif)
 
-**Spectrum Analyzer** is a component that receives an audio stream and applies
-the FFT (Fast Fourier Transform) to get the spectrum data.
+The **Spectrum Analyzer** component processes an audio stream using **FFT
+(Fast Fourier Transform)** to extract spectrum data.
 
-It normalizes the spectrum values by using the same algorithm as Audio Level
-Tracker. Please see the section above for details.
+It normalizes the spectrum values using the same algorithm as the **Audio Level
+Tracker**. Refer to the section above for details.
 
-You can retrieve the spectrum data using the scripting API. Please see the
-SpectrumAnalyzer example for detailed usage.
+You can access the spectrum data via the scripting API. For detailed usage,
+see the **SpectrumAnalyzer** example.
 
-Spectrum To Texture Component
------------------------------
+## Spectrum To Texture Component
 
 ![screenshot](https://i.imgur.com/r9kxPF3.png)
 
-Spectrum To Texture is a utility component that converts spectrum data into a
-texture that is useful for creating visual effects using shaders.
+The **Spectrum To Texture** component is a utility that converts spectrum data
+into a texture, making it useful for creating visual effects with shaders.
 
-There are two methods to use the spectrum texture.
+There are two ways to utilize the spectrum texture:
 
 ### Via Render Texture
 
-You can bake the spectrum data into a render texture by specifying it in the
-Render Texture property. The render texture must follow the following
+You can bake the spectrum data into a **Render Texture** by specifying it in the
+**Render Texture** property. The render texture must meet the following
 requirements:
 
-- Width: Must be the same as the spectrum resolution.
-- Height: Must be 1.
-- Format: R32_SFloat
+- **Width**: Must match the spectrum resolution.
+- **Height**: Must be `1`.
+- **Format**: `R32_SFloat`
 
 ### Via Material Override
 
-You can override a texture property of a material using the Material Override
-property, which is convenient when using the spectrum texture with Mesh
-Renderer.
+You can override a material's texture property using the **Material Override**
+property. This method is convenient when applying the spectrum texture to a
+**Mesh Renderer**.
 
-Scripting Interface
--------------------
+## Scripting Interface
 
-There are several public methods/properties in LASP classes, such as
-`AudioLevelTracker`, `AudioSystem`, `InputStream`. Please check the example
-scripts for detailed usages.
+LASP provides several public methods and properties in its core classes, such as
+`AudioLevelTracker`, `AudioSystem`, and `InputStream`. 
 
-Known Issue
------------
-
-When adding a property binder to an Audio Level Tracker component, the
-following error message may be shown in Console.
-
-> Generating diff  of this object for undo because the type tree changed.
-
-This error is caused by [Issue 1198546]. Please wait for a fix to arrive.
-
-[Issue 1198546]: https://issuetracker.unity3d.com/issues/serializedproperty-undo-does-not-work-properly-when-the-parent-serializedobject-is-a-script-with-managed-references
+For detailed usage, refer to the example scripts.

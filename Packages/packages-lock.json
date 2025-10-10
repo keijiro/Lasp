@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.unity.burst": {
-      "version": "1.8.19",
+      "version": "1.8.25",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -32,11 +32,11 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.burst": "1.4.4",
-        "jp.keijiro.libsoundio": "1.0.5"
+        "jp.keijiro.libsoundio": "1.0.6"
       }
     },
     "jp.keijiro.libsoundio": {
-      "version": "1.0.5",
+      "version": "1.0.6",
       "depth": 1,
       "source": "registry",
       "dependencies": {},

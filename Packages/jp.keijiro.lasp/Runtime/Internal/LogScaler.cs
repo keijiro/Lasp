@@ -7,7 +7,7 @@ namespace Lasp
     //
     // X-axis log-scale resampler for spectrum analysis
     //
-    sealed class LogScaler : System.IDisposable
+    public sealed class LogScaler : System.IDisposable
     {
         public NativeArray<float> Resample(NativeArray<float> source)
         {

@@ -126,7 +126,7 @@ namespace Lasp
         InputStream _stream;
 
         // FFT buffer object with lazy initialization
-        FftBuffer Fft => _fft ?? (_fft = new FftBuffer(_resolution * 2));
+        public FftBuffer Fft => _fft ?? (_fft = new FftBuffer(_resolution * 2));
         FftBuffer _fft;
 
         // Log scale resampler with lazy initialization

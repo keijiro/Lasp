@@ -8,7 +8,7 @@ namespace Lasp
     //
     // Burst-optimized variant of the Cooley–Tukey FFT
     //
-    sealed class FftBuffer : System.IDisposable
+    public sealed class FftBuffer : System.IDisposable
     {
         #region Public properties
 
